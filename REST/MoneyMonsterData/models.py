@@ -7,3 +7,5 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.usename + "'s profile"
+
+profile = User(username='Ryan', email='ryan@gmail.com')

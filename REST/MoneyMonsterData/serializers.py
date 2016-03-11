@@ -1,13 +1,11 @@
 from rest_framework import serializers
-from .models import UserProfile
 from django.contrib.auth.models import User
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'groups')
-
+        fields = ('username', 'email')
 
     def create(self, validated_data):
         """
@@ -23,3 +21,5 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.save()
         return instance
+
+profile = User(username='Ryan', email='ryan@gmail.com')
