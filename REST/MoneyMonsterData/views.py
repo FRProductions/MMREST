@@ -1,43 +1,49 @@
-from django.contrib.auth.models import User
-from rest_framework import permissions
-from rest_framework import renderers
-from rest_framework import viewsets
-from rest_framework.decorators import detail_route
-from rest_framework.response import Response
 from .models import *
-from .permissions import IsOwnerOrReadOnly
-from .serializers import VideoSerializer, UserSerializer
+from .serializers import *
+from rest_framework import generics
+from rest_framework import renderers
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from rest_framework.decorators import api_view
 
 
-class VideoViewSet(viewsets.ModelViewSet):
-    """
-    This endpoint presents code snippets.
-    The `highlight` field presents a hyperlink to the highlighted HTML
-    representation of the code snippet.
-    The **owner** of the code snippet may update or delete instances
-    of the code snippet.
-    Try it yourself by logging in as one of these four users: **amy**, **max**,
-    **jose** or **aziz**.  The passwords are the same as the usernames.
-    """
-    queryset = Video.objects.all()
-    serializer_class = VideoSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
-
-    @detail_route(renderer_classes=(renderers.StaticHTMLRenderer,))
-    def highlight(self, request, *args, **kwargs):
-        snippet = self.get_object()
-        return Response(snippet.highlighted)
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'videos': reverse('video-list', request=request, format=format)
+    })
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    This endpoint presents the users in the system.
-    As you can see, the collection of snippet instances owned by a user are
-    serialized using a hyperlinked representation.
-    """
+class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class VideoList(generics.ListCreateAPIView):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+
+
+class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+
+
+class QuizList(generics.ListCreateAPIView):
+    queryset = Quizzes.objects.all()
+    serializer_class = QuizSerializer
+
+
+class QuizQuestions(generics.RetrieveUpdateDestroyAPIView):
+    queryset = QuizQuestions.objects.all()
+    serializer_class = QuizQuestionSerializer
+
+# class QuizView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Quizzes.objects.all()
+#     serializer_class = QuizSerializer
