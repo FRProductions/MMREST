@@ -4,9 +4,11 @@ from .models import *
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
+    quiz = serializers.HyperlinkedIdentityField(view_name='quiz-list')
+
     class Meta:
         model = Video
-        fields = ('url', 'title',)
+        fields = ('title', 'url', 'ios', 'android', 'quiz')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,9 +18,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
+    questions = serializers.HyperlinkedIdentityField(view_name='quiz-questions')
+
     class Meta:
         model = Quizzes
-        fields = ('url', 'video_id', 'title',)
+        fields = ('title', 'url', 'video_id', 'questions')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
