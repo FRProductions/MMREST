@@ -32,15 +32,16 @@ urlpatterns = format_suffix_patterns([
     ###
     # Quiz urls
     ###
+
     url(r'^video/(?P<pk>[0-9]+)/quiz/$',
         views.QuizList.as_view(),
         name='quiz-list'),
     url(r'^video/(?P<pk>[0-9]+)/quiz/$',
-        views.QuizQuestions.as_view(),
+        views.QuizDetail.as_view(),
         name='quizzes-detail'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/$',
+    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/$',
         views.QuizQuestions.as_view(),
-        name='quiz-questions'),
+        name='quizquestions-detail'),
 ])
 
 # Login and logout views for the browsable API

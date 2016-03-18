@@ -18,7 +18,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
-    questions = serializers.HyperlinkedIdentityField(view_name='quiz-questions')
+    questions = serializers.HyperlinkedIdentityField(view_name='quizquestions-detail')
 
     class Meta:
         model = Quizzes

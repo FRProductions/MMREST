@@ -40,7 +40,7 @@ class QuizList(generics.ListCreateAPIView):
     serializer_class = QuizSerializer
 
 
-class QuizDetial(generics.RetrieveUpdateDestroyAPIView):
+class QuizDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Quizzes.objects.all()
     serializer_class = QuizSerializer
 
@@ -48,7 +48,3 @@ class QuizDetial(generics.RetrieveUpdateDestroyAPIView):
 class QuizQuestions(generics.RetrieveUpdateDestroyAPIView):
     queryset = QuizQuestions.objects.all()
     serializer_class = QuizQuestionSerializer
-
-# class QuizView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Quizzes.objects.all()
-#     serializer_class = QuizSerializer
