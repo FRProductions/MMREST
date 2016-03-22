@@ -4,7 +4,7 @@ from .models import *
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
-    quiz = serializers.HyperlinkedIdentityField(view_name='quiz-list')
+    quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
 
     class Meta:
         model = Video

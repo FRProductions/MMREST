@@ -11,7 +11,7 @@ from rest_framework.decorators import api_view
 def api_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),
-        'videos': reverse('video-list', request=request, format=format)
+        'videos': reverse('video-list', request=request, format=format),
     })
 
 
@@ -35,9 +35,9 @@ class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VideoSerializer
 
 
-class QuizList(generics.ListCreateAPIView):
-    queryset = Quizzes.objects.all()
-    serializer_class = QuizSerializer
+# class QuizList(generics.ListCreateAPIView):
+#     queryset = Quizzes.objects.all()
+#     serializer_class = QuizSerializer
 
 
 class QuizDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -45,6 +45,11 @@ class QuizDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = QuizSerializer
 
 
-class QuizQuestions(generics.RetrieveUpdateDestroyAPIView):
+class QuizQuestionsList(generics.ListCreateAPIView):
+    queryset = QuizQuestions.objects.all()
+    serializer_class = QuizQuestionSerializer
+
+
+class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = QuizQuestions.objects.all()
     serializer_class = QuizQuestionSerializer

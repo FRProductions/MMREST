@@ -33,14 +33,14 @@ urlpatterns = format_suffix_patterns([
     # Quiz urls
     ###
 
-    url(r'^video/(?P<pk>[0-9]+)/quiz/$',
-        views.QuizList.as_view(),
-        name='quiz-list'),
+    # url(r'^video/(?P<pk>[0-9]+)/quiz/$',
+    #     views.QuizList.as_view(),
+    #     name='quizzes-list'),
     url(r'^video/(?P<pk>[0-9]+)/quiz/$',
         views.QuizDetail.as_view(),
         name='quizzes-detail'),
     url(r'^video/(?P<pk>[0-9]+)/quiz/questions/$',
-        views.QuizQuestions.as_view(),
+        views.QuizQuestionsDetail.as_view(),
         name='quizquestions-detail'),
 ])
 
@@ -49,3 +49,5 @@ urlpatterns += [
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
 ]
+
+
