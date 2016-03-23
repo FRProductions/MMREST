@@ -1,14 +1,15 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import *
+from .models import Video, Quizzes, QuizQuestions
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
-    quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
+    quiz_info = serializers.HyperlinkedIdentityField(view_name='quizzes-list')
+    quiz_edit = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
 
     class Meta:
         model = Video
-        fields = ('title', 'url', 'ios', 'android', 'quiz')
+        fields = ('title', 'url', 'ios', 'android', 'quiz_info', 'quiz_edit')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,11 +19,12 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
-    questions = serializers.HyperlinkedIdentityField(view_name='quizquestions-detail')
+    questions_info = serializers.HyperlinkedIdentityField(view_name='quizquestions-list')
+    questions_edit = serializers.HyperlinkedIdentityField(view_name='quizquestions-detail')
 
     class Meta:
         model = Quizzes
-        fields = ('title', 'url', 'video_id', 'questions')
+        fields = ('title', 'url', 'video_id', 'questions_info', 'questions_edit')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
