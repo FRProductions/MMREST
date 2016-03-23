@@ -33,13 +33,16 @@ urlpatterns = format_suffix_patterns([
     # Quiz urls
     ###
 
-    # url(r'^video/(?P<pk>[0-9]+)/quiz/$',
-    #     views.QuizList.as_view(),
-    #     name='quizzes-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/$',
+    url(r'^video/(?P<pk>[0-9]+)/quiz/list/$',
+        views.QuizList.as_view(),
+        name='quizzes-list'),
+    url(r'^video/(?P<pk>[0-9]+)/quiz/detail/$',
         views.QuizDetail.as_view(),
         name='quizzes-detail'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/$',
+    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/list',
+        views.QuizQuestionsList.as_view(),
+        name='quizquestions-list'),
+    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/detail$',
         views.QuizQuestionsDetail.as_view(),
         name='quizquestions-detail'),
 ])
