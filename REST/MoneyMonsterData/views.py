@@ -1,10 +1,12 @@
-from .models import Video, Quizzes, QuizQuestions
-from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, QuizSerializer
+from .models import Video, Quizzes, QuizQuestions, Comments
+from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, QuizSerializer, CommentSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
+from rest_framework import permissions
+from .permissions import IsOwnerOrReadOnly
 
 
 @api_view(['GET'])
@@ -30,11 +32,13 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class VideoList(generics.ListCreateAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
+    lookup_filed = ('title')
 
 
 class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
+    lookup_filed = ('title')
 
 
 # quiz
@@ -59,3 +63,18 @@ class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = QuizQuestionSerializer
 
 
+# comment
+class CommentList(generics.ListCreateAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,)

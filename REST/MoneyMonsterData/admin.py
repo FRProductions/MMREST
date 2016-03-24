@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import *
 
+
 # Comments Admin
 class CommentLikesInLine(admin.StackedInline):
     model = CommentLikes
@@ -17,6 +18,7 @@ class CommentAdmin(admin.ModelAdmin):
 # Video admin
 class VideoStatusInline(admin.StackedInline):
     model = VideoStatus
+
 
 class VideoAdmin(admin.ModelAdmin):
     inlines = [VideoStatusInline, CommentsInLine]

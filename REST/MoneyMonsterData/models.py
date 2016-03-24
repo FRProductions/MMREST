@@ -22,12 +22,15 @@ class VideoStatus(models.Model):
 
 class Comments(models.Model):
     parent_id = models.ForeignKey(Video)
-    user_id = models.ForeignKey(User)
+    owner = models.ForeignKey('auth.User', related_name='comments')
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.parent_id.title + ': ' + self.text
+
+    class Meta:
+        ordering = ('date_added',)
 
 
 class CommentLikes(models.Model):
