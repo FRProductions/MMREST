@@ -32,13 +32,11 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class VideoList(generics.ListCreateAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
-    lookup_filed = ('title')
 
 
 class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
-    lookup_filed = ('title')
 
 
 # quiz

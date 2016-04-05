@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4adc98f-1491-4936-bbc0-37d84f467702" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/REST/MoneyMonsterData/permissions.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/migrations/0002_userprofile_username.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/migrations/0003_auto_20160310_2347.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/migrations/0004_auto_20160316_2342.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/migrations/0005_commentlikes_liked.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REST/db.sqlite3" afterPath="$PROJECT_DIR$/REST/db.sqlite3" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/admin.py" afterPath="$PROJECT_DIR$/REST/MoneyMonsterData/admin.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/REST/MoneyMonsterData/migrations/0001_initial.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/models.py" afterPath="$PROJECT_DIR$/REST/MoneyMonsterData/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/REST/MoneyMonsterData/serializers.py" afterPath="$PROJECT_DIR$/REST/MoneyMonsterData/serializers.py" />
@@ -38,10 +32,32 @@
       <file leaf-file-name="serializers.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.87234044">
-              <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.70212764">
+              <caret line="36" column="17" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/REST/REST/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="59" column="20" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="51" column="27" selection-start-line="51" selection-start-column="14" selection-end-line="51" selection-end-column="27" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -51,21 +67,9 @@
         <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+              <caret line="59" column="37" selection-start-line="59" selection-start-column="37" selection-end-line="59" selection-end-column="42" />
               <folding>
                 <element signature="e#0#59#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -85,7 +89,7 @@
         <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="11" column="35" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+              <caret line="58" column="59" selection-start-line="58" selection-start-column="59" selection-end-line="58" selection-end-column="59" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -104,11 +108,11 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/REST/REST/urls.py" />
         <option value="$PROJECT_DIR$/REST/REST/settings.py" />
-        <option value="$PROJECT_DIR$/REST/MoneyMonsterData/models.py" />
         <option value="$PROJECT_DIR$/REST/MoneyMonsterData/permissions.py" />
         <option value="$PROJECT_DIR$/REST/MoneyMonsterData/admin.py" />
-        <option value="$PROJECT_DIR$/REST/MoneyMonsterData/views.py" />
         <option value="$PROJECT_DIR$/REST/MoneyMonsterData/urls.py" />
+        <option value="$PROJECT_DIR$/REST/MoneyMonsterData/views.py" />
+        <option value="$PROJECT_DIR$/REST/MoneyMonsterData/models.py" />
         <option value="$PROJECT_DIR$/REST/MoneyMonsterData/serializers.py" />
       </list>
     </option>
@@ -402,7 +406,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -823,27 +829,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/REST/REST/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="59" column="20" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/admin.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="35" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -855,10 +844,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/REST/REST/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="59" column="20" selection-start-line="59" selection-start-column="20" selection-end-line="59" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="43" column="6" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="6" />
+          <caret line="59" column="37" selection-start-line="59" selection-start-column="37" selection-end-line="59" selection-end-column="42" />
           <folding>
             <element signature="e#0#59#0" expanded="true" />
           </folding>
@@ -868,17 +865,27 @@
     <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <caret line="51" column="27" selection-start-line="51" selection-start-column="14" selection-end-line="51" selection-end-column="27" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="58" column="59" selection-start-line="58" selection-start-column="59" selection-end-line="58" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/REST/MoneyMonsterData/serializers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.87234044">
-          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.70212764">
+          <caret line="36" column="17" selection-start-line="36" selection-start-column="17" selection-end-line="36" selection-end-column="17" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>

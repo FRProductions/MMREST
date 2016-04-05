@@ -56,7 +56,7 @@ class Quizzes(models.Model):
 
 
 class QuizQuestions(models.Model):
-    quiz_id = models.ForeignKey(Quizzes)
+    quiz_id = models.ForeignKey(Quizzes, related_name='quiz')
     question_text = models.TextField(blank=False, max_length=1000)
     answer_one = models.TextField(blank=False, max_length=500)
     answer_two = models.TextField(blank=False, max_length=500)

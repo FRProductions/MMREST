@@ -47,7 +47,7 @@ urlpatterns = format_suffix_patterns([
     url(r'^video/(?P<pk>[0-9]+)/quiz/questions/list',
         views.QuizQuestionsList.as_view(),
         name='quizquestions-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/detail$',
+    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/detail',
         views.QuizQuestionsDetail.as_view(),
         name='quizquestions-detail'),
 
