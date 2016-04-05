@@ -4,14 +4,13 @@ from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
-    quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
-    comments_info = serializers.HyperlinkedIdentityField(view_name='comments-list')
-    comments_edit = serializers.HyperlinkedIdentityField(view_name='comments-detail')
+    # quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
+    # comments_info = serializers.HyperlinkedIdentityField(view_name='comments-list')
+    # comments = serializers.HyperlinkedIdentityField(view_name='comments-detail')
 
     class Meta:
         model = Video
-        fields = ('title', 'url', 'ios', 'android', 'quiz', 'comments_info',
-                  'comments_edit',)
+        fields = ('title', 'url', 'ios', 'android')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -50,3 +49,14 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comments
         fields = ('url', 'parent_id', 'comments')
+
+
+class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
+    quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
+    # comments_info = serializers.HyperlinkedIdentityField(view_name='comments-list')
+    comments = CommentSerializer(source='video_parent', many=True)
+
+    class Meta:
+        model = Video
+        fields = ('title', 'url', 'ios', 'android', 'quiz',
+                  'comments')

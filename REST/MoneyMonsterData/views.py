@@ -1,5 +1,5 @@
 from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo
-from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, QuizSerializer,\
+from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, VideoDataSerializer, QuizSerializer,\
                          CommentSerializer, CommentInfoSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
@@ -37,7 +37,7 @@ class VideoList(generics.ListCreateAPIView):
 
 class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
-    serializer_class = VideoSerializer
+    serializer_class = VideoDataSerializer
 
 
 # quiz
