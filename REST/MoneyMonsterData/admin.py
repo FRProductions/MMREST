@@ -7,12 +7,16 @@ class CommentLikesInLine(admin.StackedInline):
     model = CommentLikes
 
 
+class CommentInfoInLine(admin.StackedInline):
+    model = CommentInfo
+
+
 class CommentsInLine(admin.StackedInline):
     model = Comments
 
 
 class CommentAdmin(admin.ModelAdmin):
-    inlines = [CommentLikesInLine,]
+    inlines = [CommentInfoInLine]
 
 
 # Video admin
@@ -36,7 +40,8 @@ class QuizQuestionsInline(admin.StackedInline):
 class QuizAdmin(admin.ModelAdmin):
     inlines = [QuizQuestionsInline, ]
 
+
 admin.site.register(Video, VideoAdmin)
-admin.site.register(Comments, CommentAdmin)
+admin.site.register(Comments,  CommentAdmin)
 admin.site.register(Quizzes, QuizAdmin)
 admin.site.register(QuizAnswers)

@@ -1,5 +1,6 @@
-from .models import Video, Quizzes, QuizQuestions, Comments
-from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, QuizSerializer, CommentSerializer
+from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo
+from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, QuizSerializer,\
+                         CommentSerializer, CommentInfoSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.response import Response
@@ -65,14 +66,23 @@ class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
 class CommentList(generics.ListCreateAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentSerializer
+
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comments.objects.all()
+    serializer_class = CommentSerializer
+
+
+# comment info
+class CommentInfoList(generics.ListCreateAPIView):
+    queryset = CommentInfo.objects.all()
+    serializer_class = CommentInfoSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
 
-class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Comments.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+class CommentInfoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CommentInfo.objects.all()
+    serializer_class = CommentInfoSerializer

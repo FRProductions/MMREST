@@ -36,7 +36,7 @@ urlpatterns = format_suffix_patterns([
     url(r'^video/(?P<pk>[0-9]+)/quiz/list/$',
         views.QuizList.as_view(),
         name='quizzes-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/detail/$',
+    url(r'^video/(?P<pk>[0-9]+)/quiz/$',
         views.QuizDetail.as_view(),
         name='quizzes-detail'),
 
@@ -51,16 +51,28 @@ urlpatterns = format_suffix_patterns([
         views.QuizQuestionsDetail.as_view(),
         name='quizquestions-detail'),
 
+
     ###
-    # Quiz urls
+    # Comment urls
     ###
 
-    url(r'^video/(?P<pk>[0-9]+)/quiz/comments/list/$',
+    url(r'^video/(?P<pk>[0-9]+)/comments/list/$',
         views.CommentList.as_view(),
         name='comments-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/comments/detail/$',
+    url(r'^video/(?P<pk>[0-9]+)/comments/detail/$',
         views.CommentDetail.as_view(),
         name='comments-detail'),
+
+     ###
+    # Comment Info urls
+    ###
+
+    url(r'^video/(?P<pk>[0-9]+)/comments/info/list/$',
+        views.CommentInfoList.as_view(),
+        name='commentinfo-list'),
+    url(r'^video/(?P<pk>[0-9]+)/comments/info/detail/$',
+        views.CommentInfoDetail.as_view(),
+        name='commentinfo-detail'),
 ])
 
 # Login and logout views for the browsable API

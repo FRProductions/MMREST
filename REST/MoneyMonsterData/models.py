@@ -9,7 +9,7 @@ class Video(models.Model):
     android = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.title + ' page'
+        return self.title + ' video'
 
 
 class VideoStatus(models.Model):
@@ -22,12 +22,16 @@ class VideoStatus(models.Model):
 
 class Comments(models.Model):
     parent_id = models.ForeignKey(Video, related_name='video_parent')
-    owner = models.ForeignKey('auth.User', related_name='comments')
-    text = models.TextField(blank=False, max_length=1000)
-    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.parent_id.title + ': ' + self.text
+        return self.parent_id.title
+
+
+class CommentInfo(models.Model):
+    comment_id = models.ForeignKey(Comments, related_name='comment_parent')
+    owner = models.ForeignKey('auth.User')
+    text = models.TextField(blank=False, max_length=1000)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('date_added',)
