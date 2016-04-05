@@ -21,7 +21,7 @@ class VideoStatus(models.Model):
 
 
 class Comments(models.Model):
-    parent_id = models.ForeignKey(Video)
+    parent_id = models.ForeignKey(Video, related_name='video_parent')
     owner = models.ForeignKey('auth.User', related_name='comments')
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)

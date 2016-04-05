@@ -11,7 +11,8 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Video
         fields = ('title', 'url', 'ios', 'android', 'quiz', 'comments_info',
-                  'comments_edit')
+                  'comments_edit',)
+        depth = 10
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,12 +30,11 @@ class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
-    # questions = QuizQuestionSerializer(many=False, read_only=True)
+    questions = QuizQuestionSerializer(source='quiz', many=True)
 
     class Meta:
         model = Quizzes
-        fields = ('title', 'url', 'video_id', 'quiz')
-        depth = 3
+        fields = ('title', 'url', 'video_id', 'questions')
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
@@ -42,4 +42,4 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comments
-        fields = ('url', 'parent_id', 'owner', 'text', 'date_added', 'owner')
+        fields = ('url', 'parent_id', 'owner', 'text', 'date_added', 'owner',)
