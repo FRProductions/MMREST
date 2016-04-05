@@ -10,7 +10,7 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('title', 'url', 'ios', 'android')
+        fields = ('title', 'url',)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -53,7 +53,6 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
     quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
-    # comments_info = serializers.HyperlinkedIdentityField(view_name='comments-list')
     comments = CommentSerializer(source='video_parent', many=True)
 
     class Meta:
