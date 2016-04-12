@@ -10,7 +10,7 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('title', 'url',)
+        fields = ('title', 'url', 'thumbnailUrl')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

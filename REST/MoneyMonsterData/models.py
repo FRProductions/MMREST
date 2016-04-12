@@ -5,6 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Video(models.Model):
     title = models.CharField(max_length=255)
+    thumbnailUrl = models.CharField(max_length=255)
     ios = models.CharField(max_length=255)
     android = models.CharField(max_length=255)
 
