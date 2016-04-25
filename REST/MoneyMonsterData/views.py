@@ -1,6 +1,6 @@
-from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo
+from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Haps
 from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, VideoDataSerializer, QuizSerializer,\
-                         CommentSerializer, CommentInfoSerializer
+                         CommentSerializer, CommentInfoSerializer, HapsSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.response import Response
@@ -86,3 +86,14 @@ class CommentInfoList(generics.ListCreateAPIView):
 class CommentInfoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CommentInfo.objects.all()
     serializer_class = CommentInfoSerializer
+
+
+# quiz
+class HapsList(generics.ListCreateAPIView):
+    queryset = Haps.objects.all()
+    serializer_class = HapsSerializer
+
+
+class HapsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Haps.objects.all()
+    serializer_class = HapsSerializer

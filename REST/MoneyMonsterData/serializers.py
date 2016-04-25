@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo
+from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Haps
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,18 +13,25 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('title', 'url', 'thumbnailUrl')
 
 
+class HapsSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Haps
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    haps = HapsSerializer(source='User', many=True)
 
     class Meta:
         model = User
-        fields = ('url', 'username', 'id', )
+        fields = ('url', 'username', 'id', 'haps')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = QuizQuestions
-        fields = ('quiz_id', 'question_text', 'answer_one', 'answer_two', 'answer_three', 'answer_four',
-                  'correct_answer')
+        fields = ('quiz_id', 'question_text', 'answer',
+                  'correct_answer', 'false_answer')
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):

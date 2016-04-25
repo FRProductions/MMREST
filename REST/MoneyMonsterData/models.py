@@ -63,11 +63,9 @@ class Quizzes(models.Model):
 class QuizQuestions(models.Model):
     quiz_id = models.ForeignKey(Quizzes, related_name='quiz')
     question_text = models.TextField(blank=False, max_length=1000)
-    answer_one = models.TextField(blank=False, max_length=500)
-    answer_two = models.TextField(blank=False, max_length=500)
-    answer_three = models.TextField(blank=False, max_length=500)
-    answer_four = models.TextField(blank=False, max_length=500)
-    correct_answer = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(4)])
+    answer = models.BooleanField(default=False)
+    correct_answer = models.TextField(blank=False, max_length=1000)
+    false_answer = models.TextField(blank=False, max_length=1000)
 
     def __str__(self):
         return 'Question: ' + self.quiz_id.title + ': ' + self.question_text
@@ -92,3 +90,14 @@ class QuizResults(models.Model):
 
     def __str__(self):
         return self.user_id.username + ' results'
+
+
+class Haps(models.Model):
+    user_id = models.ForeignKey(User, related_name='User')
+    passed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+    failed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+    tasks = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)])
+    discussions = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)])
+
+    def __str__(self):
+        return self.user_id.username + ' haps'

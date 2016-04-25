@@ -21,6 +21,17 @@ urlpatterns = format_suffix_patterns([
         name='user-detail'),
 
     ###
+    # Haps urls
+    ###
+
+    url(r'^user/haps/$',
+        views.HapsList.as_view(),
+        name='haps-list'),
+    url(r'^video/haps/(?P<pk>[0-9]+)/$',
+        views.HapsDetail.as_view(),
+        name='haps-detail'),
+
+    ###
     # Video urls
     ###
 

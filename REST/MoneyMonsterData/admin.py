@@ -19,6 +19,11 @@ class CommentAdmin(admin.ModelAdmin):
     inlines = [CommentInfoInLine]
 
 
+# Haps Admin
+# class HapsAdmin(admin.StackedInline):
+#     model = Haps
+
+
 # Video admin
 class VideoStatusInline(admin.StackedInline):
     model = VideoStatus
@@ -45,3 +50,4 @@ admin.site.register(Video, VideoAdmin)
 admin.site.register(Comments,  CommentAdmin)
 admin.site.register(Quizzes, QuizAdmin)
 admin.site.register(QuizAnswers)
+admin.site.register(Haps)
