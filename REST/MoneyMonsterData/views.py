@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
 from rest_framework import permissions
-from .permissions import IsOwnerOrReadOnly
+from rest_framework.views import APIView
+from rest_framework import viewsets
 
 
 @api_view(['GET'])
@@ -88,12 +89,21 @@ class CommentInfoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentInfoSerializer
 
 
-# quiz
+# haps
 class HapsList(generics.ListCreateAPIView):
     queryset = Haps.objects.all()
     serializer_class = HapsSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return Haps.objects.filter(user_id=user)
 
 
 class HapsDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Haps.objects.all()
     serializer_class = HapsSerializer
+
