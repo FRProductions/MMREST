@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Haps
+from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Haps, ToDos
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,3 +66,10 @@ class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
         model = Video
         fields = ('title', 'url', 'ios', 'android', 'quiz',
                   'comments')
+
+
+class ToDosSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = ToDos
+        fields = ('user_id', 'icon_id', 'text', 'date_added', 'date_completed')

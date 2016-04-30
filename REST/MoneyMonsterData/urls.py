@@ -27,9 +27,20 @@ urlpatterns = format_suffix_patterns([
     url(r'^user/haps/$',
         views.HapsList.as_view(),
         name='haps-list'),
-    url(r'^video/haps/(?P<pk>[0-9]+)/$',
+    url(r'^user/haps/(?P<pk>[0-9]+)/$',
         views.HapsDetail.as_view(),
         name='haps-detail'),
+
+    ###
+    # ToDos urls
+    ###
+
+    url(r'^user/todo/$',
+        views.TodosList.as_view(),
+        name='todos-list'),
+    url(r'^user/todo/(?P<pk>[0-9]+)/$',
+        views.TodosDetail.as_view(),
+        name='todos-detail'),
 
     ###
     # Video urls

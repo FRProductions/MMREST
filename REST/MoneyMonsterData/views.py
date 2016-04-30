@@ -1,6 +1,6 @@
-from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Haps
+from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Haps, ToDos
 from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, VideoDataSerializer, QuizSerializer,\
-                         CommentSerializer, CommentInfoSerializer, HapsSerializer
+                         CommentSerializer, CommentInfoSerializer, HapsSerializer, ToDosSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.response import Response
@@ -107,3 +107,21 @@ class HapsDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Haps.objects.all()
     serializer_class = HapsSerializer
 
+
+# haps
+class TodosList(generics.ListCreateAPIView):
+    queryset = ToDos.objects.all()
+    serializer_class = ToDosSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return ToDos.objects.filter(user_id=user)
+
+
+class TodosDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ToDos.objects.all()
+    serializer_class = ToDosSerializer
