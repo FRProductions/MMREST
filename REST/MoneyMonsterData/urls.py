@@ -21,15 +21,15 @@ urlpatterns = format_suffix_patterns([
         name='user-detail'),
 
     ###
-    # Haps urls
+    # Profile urls
     ###
 
-    url(r'^user/haps/$',
-        views.HapsList.as_view(),
-        name='haps-list'),
-    url(r'^user/haps/(?P<pk>[0-9]+)/$',
-        views.HapsDetail.as_view(),
-        name='haps-detail'),
+    url(r'^user/profile/$',
+        views.ProfileList.as_view(),
+        name='profile-list'),
+    url(r'^user/profile/(?P<pk>[0-9]+)/$',
+        views.ProfileDetail.as_view(),
+        name='profile-detail'),
 
     ###
     # ToDos urls

@@ -92,7 +92,7 @@ class QuizResults(models.Model):
         return self.user_id.username + ' results'
 
 
-class Haps(models.Model):
+class Profile(models.Model):
     user_id = models.ForeignKey(User, related_name='User')
     passed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
     failed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
