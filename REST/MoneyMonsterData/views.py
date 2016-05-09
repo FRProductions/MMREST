@@ -7,8 +7,6 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
 from rest_framework import permissions
-from rest_framework.views import APIView
-from rest_framework import viewsets
 
 
 @api_view(['GET'])
@@ -19,7 +17,10 @@ def api_root(request, format=None):
     })
 
 
+###
 # User
+###
+
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -30,7 +31,10 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
 
 
-# Video
+###
+# Videos
+###
+
 class VideoList(generics.ListCreateAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
@@ -41,7 +45,10 @@ class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = VideoDataSerializer
 
 
-# quiz
+###
+# Quiz
+###
+
 class QuizList(generics.ListCreateAPIView):
     queryset = Quizzes.objects.all()
     serializer_class = QuizSerializer
@@ -52,7 +59,10 @@ class QuizDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = QuizSerializer
 
 
-# questions
+###
+# Quiz Questions
+###
+
 class QuizQuestionsList(generics.ListCreateAPIView):
     queryset = QuizQuestions.objects.all()
     serializer_class = QuizQuestionSerializer
@@ -63,7 +73,10 @@ class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = QuizQuestionSerializer
 
 
-# comment
+###
+# Comments
+###
+
 class CommentList(generics.ListCreateAPIView):
     queryset = Comments.objects.all()
     serializer_class = CommentSerializer
@@ -74,7 +87,10 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
 
 
-# comment info
+###
+# Comment Info
+###
+
 class CommentInfoList(generics.ListCreateAPIView):
     queryset = CommentInfo.objects.all()
     serializer_class = CommentInfoSerializer
@@ -89,7 +105,10 @@ class CommentInfoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentInfoSerializer
 
 
-# haps
+###
+#  Haps/Profile
+###
+
 class ProfileList(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
@@ -108,7 +127,10 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProfileSerializer
 
 
-# haps
+###
+# To Do
+###
+
 class TodosList(generics.ListCreateAPIView):
     queryset = ToDos.objects.all()
     serializer_class = ToDosSerializer

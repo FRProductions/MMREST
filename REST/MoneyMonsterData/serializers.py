@@ -4,9 +4,6 @@ from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Profil
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
-    # quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
-    # comments_info = serializers.HyperlinkedIdentityField(view_name='comments-list')
-    # comments = serializers.HyperlinkedIdentityField(view_name='comments-detail')
 
     class Meta:
         model = Video

@@ -1,13 +1,11 @@
 from django.conf.urls import url, include
 from MoneyMonsterData import views
 from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework_jwt.views import obtain_jwt_token
 
 
 # API endpoints
 urlpatterns = format_suffix_patterns([
     url(r'^$', views.api_root),
-    # url(r'^api-token-auth/', obtain_jwt_token),
 
     ###
     # User urls

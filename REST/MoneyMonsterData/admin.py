@@ -19,11 +19,6 @@ class CommentAdmin(admin.ModelAdmin):
     inlines = [CommentInfoInLine]
 
 
-# Haps Admin
-# class HapsAdmin(admin.StackedInline):
-#     model = Haps
-
-
 # Video admin
 class VideoStatusInline(admin.StackedInline):
     model = VideoStatus
