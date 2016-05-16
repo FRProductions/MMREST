@@ -19,4 +19,7 @@ chown -R :www-data .
 chown -R :www-data REST/media
 chmod -R g+w REST/media
 
+# restrict config file
+chmod 640 REST/config.json
+
 echo "done applying permissions"
