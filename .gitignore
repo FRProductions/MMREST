@@ -1,3 +1,6 @@
+# secure config files
+REST/config.json
+
 # Python object files
 *.pyc
 *.pyo

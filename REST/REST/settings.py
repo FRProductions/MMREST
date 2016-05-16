@@ -8,16 +8,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import json
 import os
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# load config JSON
+with open("config.json") as config_json_file:
+    config_json = json.load(config_json_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&(w&k+lr49w^$a43ujtw$1g5*-0(qb+)x9j64kv26x%qvf&dj%'
+SECRET_KEY = config_json["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -84,12 +89,8 @@ WSGI_APPLICATION = 'REST.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = config_json["DATABASES"]
+DATABASES["default"]["NAME"] = DATABASES["default"]["NAME"].replace("<base_dir>", BASE_DIR)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
