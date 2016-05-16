@@ -1,6 +1,9 @@
 # secure config files
 REST/config.json
 
+# SQLite DB
+REST/db.sqlite3
+
 # Python object files
 *.pyc
 *.pyo
