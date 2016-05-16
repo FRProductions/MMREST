@@ -5,9 +5,11 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Video(models.Model):
     title = models.CharField(max_length=255)
-    thumbnailUrl = models.CharField(max_length=255)
-    ios = models.CharField(max_length=255)
-    android = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    thumbnail_filename = models.CharField(max_length=255)
+    hls_url = models.CharField(max_length=255)
+    rtmp_server_url = models.CharField(max_length=255)
+    rtmp_stream_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.title + ' video'

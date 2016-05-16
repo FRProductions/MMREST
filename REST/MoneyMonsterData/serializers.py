@@ -7,7 +7,7 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('title', 'url', 'thumbnailUrl')
+        fields = ('title', 'url', 'thumbnail_filename')
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -56,13 +56,14 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
-    quiz = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
+    quiz_url = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
     comments = CommentSerializer(source='video_parent', many=True)
 
     class Meta:
         model = Video
-        fields = ('title', 'url', 'ios', 'android', 'quiz',
-                  'comments')
+        fields = ('title', 'description', 'thumbnail_filename',
+                  'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
+                  'quiz_url', 'comments')
 
 
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):
