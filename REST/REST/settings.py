@@ -133,6 +133,7 @@ EMAIL_PORT = config_json["EMAIL_PORT"]
 EMAIL_HOST_USER = config_json["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = config_json["EMAIL_HOST_PASSWORD"]
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "Money Monster: "
 
 # config needed for django-rest-auth
 
