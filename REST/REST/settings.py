@@ -124,12 +124,21 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
+# email
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = config_json["EMAIL_HOST"]
+EMAIL_PORT = config_json["EMAIL_PORT"]
+EMAIL_HOST_USER = config_json["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = config_json["EMAIL_HOST_PASSWORD"]
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 # config needed for django-rest-auth
 
 REST_SESSION_LOGIN = False
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
-ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
