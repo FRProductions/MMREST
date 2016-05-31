@@ -36,22 +36,22 @@ IMPORTANT: make sure upstream name (i.e. "django_mm") matches the "uwsgi_pass" s
 Useful commands
 ---------------
 
-nginx
-  ps -Al | grep nginx         # view running nginx processes
-  sudo service nginx stop     # WARNING: have Fraboom SSL password handy for quickly restarting the server!
-  sudo service nginx start
-  sudo fuser -k 80/tcp        # kill stubborn nginx!
+    nginx
+      ps -Al | grep nginx         # view running nginx processes
+      sudo service nginx stop     # WARNING: have Fraboom SSL password handy for quickly restarting the server!
+      sudo service nginx start
+      sudo fuser -k 80/tcp        # kill stubborn nginx!
 
-  view log file:
-      sudo tail /var/log/nginx/error.log
+      view log file:
+          sudo tail /var/log/nginx/error.log
 
-UWSGI
-  ps -Al | grep uwsgi         # view running uwsgi processes
-  sudo service uwsgi stop
-  sudo service uwsgi start
+    UWSGI
+      ps -Al | grep uwsgi         # view running uwsgi processes
+      sudo service uwsgi stop
+      sudo service uwsgi start
 
-  view log file:
-      sudo tail /var/log/uwsgi.log
+      view log file:
+          sudo tail /var/log/uwsgi.log
 
-  view uwsgi upstart config:
-      /etc/init/uwsgi.conf
+      view uwsgi upstart config:
+          /etc/init/uwsgi.conf
