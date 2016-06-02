@@ -19,6 +19,10 @@ class CommentAdmin(admin.ModelAdmin):
     inlines = [CommentInfoInLine]
 
 
+class QuizInline(admin.StackedInline):
+    model = QuizResults
+
+
 # Video admin
 class VideoStatusInline(admin.StackedInline):
     model = VideoStatus
@@ -28,21 +32,15 @@ class VideoAdmin(admin.ModelAdmin):
     inlines = [VideoStatusInline, CommentsInLine]
 
 
-# Quiz admin
-class QuizAnswersInline(admin.StackedInline):
-    model = QuizAnswers
-
-
 class QuizQuestionsInline(admin.StackedInline):
     model = QuizQuestions
 
 
 class QuizAdmin(admin.ModelAdmin):
-    inlines = [QuizQuestionsInline, ]
+    inlines = [QuizQuestionsInline, QuizInline]
 
 
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Comments,  CommentAdmin)
 admin.site.register(Quizzes, QuizAdmin)
-admin.site.register(QuizAnswers)
 admin.site.register(Profile)

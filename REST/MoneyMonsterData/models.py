@@ -47,7 +47,7 @@ class CommentLikes(models.Model):
 
 
 class ToDos(models.Model):
-    user_id = models.ForeignKey(User)
+    user_id = models.ForeignKey(User, related_name='todo_parent')
     icon_id = models.CharField(max_length=255)
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -55,7 +55,7 @@ class ToDos(models.Model):
 
 
 class Quizzes(models.Model):
-    video_id = models.ForeignKey(Video)
+    video_id = models.ForeignKey(Video, related_name='video')
     title = models.CharField(max_length=255)
 
     def __str__(self):
@@ -73,33 +73,23 @@ class QuizQuestions(models.Model):
         return 'Question: ' + self.quiz_id.title + ': ' + self.question_text
 
 
-class QuizAnswers(models.Model):
-    quiz_question_id = models.ForeignKey(QuizQuestions)
-    user_id = models.ForeignKey(User)
-    user_answer = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(4)])
-    explanation_text = models.TextField(blank=False, max_length=1000)
-    date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return 'Question: ' + self.quiz_question_id.question_text
-
-
 class QuizResults(models.Model):
     quiz_id = models.ForeignKey(Quizzes)
-    user_id = models.ForeignKey(User)
+    user_id = models.ForeignKey(User, related_name='quiz_parent')
+    passed = models.BooleanField(default=False)
     score = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user_id.username + ' results'
+        return 'Quiz Results for : ' + self.quiz_id.title
 
 
 class Profile(models.Model):
     user_id = models.ForeignKey(User, related_name='User')
-    passed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-    failed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-    tasks = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)])
-    discussions = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)])
+    passed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0)
+    failed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0)
+    tasks = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)], default=0)
+    discussions = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)], default=0)
 
     def __str__(self):
         return self.user_id.username + ' haps'

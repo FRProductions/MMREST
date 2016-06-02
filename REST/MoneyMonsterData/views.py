@@ -1,6 +1,5 @@
-from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Profile, ToDos
-from .serializers import QuizQuestionSerializer, UserSerializer, VideoSerializer, VideoDataSerializer, QuizSerializer,\
-                         CommentSerializer, CommentInfoSerializer, ProfileSerializer, ToDosSerializer
+from .models import *
+from .serializers import *
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.response import Response
@@ -110,12 +109,13 @@ class CommentInfoDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class ProfileList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
         """
-        This view should return a list of all the purchases
+        This view should return a list of profile data
         for the currently authenticated user.
         """
         user = self.request.user
@@ -137,7 +137,7 @@ class TodosList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """
-        This view should return a list of all the purchases
+        This view should return todo
         for the currently authenticated user.
         """
         user = self.request.user
@@ -147,3 +147,25 @@ class TodosList(generics.ListCreateAPIView):
 class TodosDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ToDos.objects.all()
     serializer_class = ToDosSerializer
+
+
+###
+# Quiz Results
+###
+
+class QuizResultsList(generics.ListCreateAPIView):
+    queryset = QuizResults.objects.all()
+    serializer_class = QuizResultsSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of profile data
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return QuizResults.objects.filter(user_id=user)
+
+
+class QuizResultsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = QuizResults.objects.all()
+    serializer_class = QuizResultsSerializer

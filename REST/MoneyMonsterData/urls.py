@@ -18,6 +18,7 @@ urlpatterns = format_suffix_patterns([
         views.UserDetail.as_view(),
         name='user-detail'),
 
+
     ###
     # Profile urls
     ###
@@ -72,6 +73,17 @@ urlpatterns = format_suffix_patterns([
     url(r'^video/(?P<pk>[0-9]+)/quiz/questions/detail',
         views.QuizQuestionsDetail.as_view(),
         name='quizquestions-detail'),
+
+     ###
+    # Quiz results urls
+    ###
+
+    url(r'^video/(?P<pk>[0-9]+)/quiz/results/list',
+        views.QuizResultsList.as_view(),
+        name='quizresults-list'),
+    url(r'^video/(?P<pk>[0-9]+)/quiz/results/detail',
+        views.QuizResultsDetail.as_view(),
+        name='quizresults-detail'),
 
 
     ###

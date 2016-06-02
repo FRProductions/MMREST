@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Profile, ToDos
+from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Profile, ToDos, QuizResults
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,18 +16,33 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         model = Profile
 
 
+class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = QuizResults
+
+
+class ToDosSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = ToDos
+        fields = ('user_id', 'icon_id', 'text', 'date_added', 'date_completed')
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    to_do = ToDosSerializer(source='todo_parent', many=True)
     profile = ProfileSerializer(source='User', many=True)
+    quiz_results = QuizResultsSerializer(source='quiz_parent', many=True)
 
     class Meta:
         model = User
-        fields = ('url', 'username', 'id', 'profile')
+        fields = ('url', 'username', 'id', 'profile', 'quiz_results', 'to_do')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = QuizQuestions
-        fields = ('quiz_id', 'question_text', 'answer',
+        fields = ('question_text', 'answer',
                   'correct_answer', 'false_answer')
 
 
@@ -36,7 +51,7 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Quizzes
-        fields = ('title', 'url', 'video_id', 'questions')
+        fields = ('url', 'title', 'questions')
 
 
 class CommentInfoSerializer(serializers.HyperlinkedModelSerializer):
@@ -56,18 +71,13 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
-    quiz_url = serializers.HyperlinkedIdentityField(view_name='quizzes-detail')
+    quiz = QuizSerializer(source='video', many=True)
     comments = CommentSerializer(source='video_parent', many=True)
 
     class Meta:
         model = Video
         fields = ('title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
-                  'quiz_url', 'comments')
+                  'quiz', 'comments')
 
 
-class ToDosSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = ToDos
-        fields = ('user_id', 'icon_id', 'text', 'date_added', 'date_completed')
