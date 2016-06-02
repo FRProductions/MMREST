@@ -3,6 +3,30 @@
 {% block content %}
   <div class="row">
     <h3>E-mail verification</h3><hr/>
-    {% include "fragments/email_verification_form.html" %}
+    <div class="email-verification-status"></div>
   </div>
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+  $().ready(function(){
+
+    // status DIV
+    var stsdiv = $(".email-verification-status");
+    stsdiv.text("Verifying email...");
+
+    // post key to verification endpoint
+    $.post('{% url 'rest_verify_email' %}', { key: "{{key}}" })
+      .fail(function(data){
+        stsdiv.text( "Could not verify email");
+        console.log("data: " + JSON.stringify(data));
+      })
+      .done(function(data){
+        stsdiv.text( "Success!  Thank you for using Money Monster.");
+        console.log("data: " + JSON.stringify(data));
+      });
+
+  });
+
+  </script>
 {% endblock %}
