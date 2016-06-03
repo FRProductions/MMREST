@@ -87,7 +87,7 @@ class QuizResults(models.Model):
 
 
 class Profile(models.Model):
-    user_id = models.OneToOneField(User, related_name='User')
+    user_id = models.ForeignKey(User, related_name='User')
     passed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0)
     failed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0)
     tasks = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)], default=0)
@@ -101,3 +101,5 @@ class Profile(models.Model):
 def create_profile_data(sender, **kwargs):
     if kwargs.get('created', False):
         Profile.objects.create(user_id=kwargs.get('instance'), passed=0, failed=0, tasks=0, discussions=0)
+        ToDos.objects.create(user_id=kwargs.get('instance'), icon_id="AppMobileTheme.BTN_TRASH",
+                             text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))
