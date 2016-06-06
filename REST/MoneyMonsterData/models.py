@@ -55,6 +55,9 @@ class ToDos(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     date_completed = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.user_id.username + ' - TodDos'
+
 
 class Quizzes(models.Model):
     video_id = models.ForeignKey(Video, related_name='video')
@@ -94,12 +97,12 @@ class Profile(models.Model):
     discussions = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)], default=0)
 
     def __str__(self):
-        return self.user_id.username + ' haps'
+        return self.user_id.username + ' profile'
 
 
 @receiver(post_save, sender=User)
 def create_profile_data(sender, **kwargs):
     if kwargs.get('created', False):
         Profile.objects.create(user_id=kwargs.get('instance'), passed=0, failed=0, tasks=0, discussions=0)
-        ToDos.objects.create(user_id=kwargs.get('instance'), icon_id="AppMobileTheme.BTN_TRASH",
+        ToDos.objects.create(user_id=kwargs.get('instance'), icon_id="mm-Button-trash-icon",
                              text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))
