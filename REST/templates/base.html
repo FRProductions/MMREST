@@ -32,24 +32,6 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-      var error_response = function(data){
-        $('.api-response').html("API Response: " + data.status + ' ' + data.statusText + '<br/>Content: ' + data.responseText);
-      }
-      var susccess_response = function(data){
-        $('.api-response').html("API Response: OK<br/>Content: " + JSON.stringify(data));
-      }
-
-      $().ready(function(){
-        $('form.ajax-post button[type=submit]').click(function(){
-          var form = $('form.ajax-post');
-          $.post(form.attr('action'), form.serialize())
-          .fail(function(data){error_response(data);})
-          .done(function(data){susccess_response(data);});
-          return false;
-        });
-      });
-    </script>
     {% block script %}{% endblock %}
   </body>
 </html>
