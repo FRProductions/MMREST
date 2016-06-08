@@ -77,31 +77,13 @@ class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class CommentList(generics.ListCreateAPIView):
-    queryset = Comments.objects.all()
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Comments.objects.all()
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-
-
-###
-# Comment Info
-###
-
-class CommentInfoList(generics.ListCreateAPIView):
-    queryset = CommentInfo.objects.all()
-    serializer_class = CommentInfoSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class CommentInfoDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CommentInfo.objects.all()
-    serializer_class = CommentInfoSerializer
 
 
 ###
@@ -132,7 +114,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class TodosList(generics.ListCreateAPIView):
-    queryset = ToDos.objects.all()
+    queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
 
     def get_queryset(self):
@@ -145,7 +127,7 @@ class TodosList(generics.ListCreateAPIView):
 
 
 class TodosDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ToDos.objects.all()
+    queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
 
 

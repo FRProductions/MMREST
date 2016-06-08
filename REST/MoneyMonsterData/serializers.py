@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Video, Quizzes, QuizQuestions, Comments, CommentInfo, Profile, ToDos, QuizResults
+from .models import Video, Quizzes, QuizQuestions, Comment, Profile, ToDo, QuizResults
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
@@ -25,7 +25,7 @@ class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = ToDos
+        model = ToDo
         fields = ('url', 'user_id', 'icon_id', 'text', 'date_added', 'date_completed')
 
 
@@ -54,30 +54,21 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'title', 'questions')
 
 
-class CommentInfoSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
-        model = CommentInfo
-        fields = ('url', 'text', 'date_added', 'owner',)
-
-
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    comments = CommentInfoSerializer(source='comment_parent', many=True)
-
-    class Meta:
-        model = Comments
-        fields = ('url', 'parent_id', 'comments')
+        model = Comment
+        fields = ('url', 'video_id', 'text', 'date_added', 'owner')
 
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
     quiz = QuizSerializer(source='video', many=True)
-    comments = CommentSerializer(source='video_parent', many=True)
+    comment = CommentSerializer(source='video_parent', many=True)
 
     class Meta:
         model = Video
         fields = ('title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
-                  'quiz', 'comments')
-
+                  'quiz', 'comment')
 

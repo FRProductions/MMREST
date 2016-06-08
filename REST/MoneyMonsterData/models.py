@@ -25,15 +25,8 @@ class VideoStatus(models.Model):
     check_status = models.BooleanField(default=False)
 
 
-class Comments(models.Model):
-    parent_id = models.ForeignKey(Video, related_name='video_parent')
-
-    def __str__(self):
-        return self.parent_id.title
-
-
-class CommentInfo(models.Model):
-    comment_id = models.ForeignKey(Comments, related_name='comment_parent')
+class Comment(models.Model):
+    video_id = models.ForeignKey(Video, related_name='video_parent')
     owner = models.ForeignKey('auth.User')
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -41,14 +34,16 @@ class CommentInfo(models.Model):
     class Meta:
         ordering = ('date_added',)
 
+    def __str__(self):
+        return self.video_id.title
 
-class CommentLikes(models.Model):
+
+class CommentLike(models.Model):
     user_id = models.ForeignKey(User)
-    comment_id = models.ForeignKey(Comments)
-    liked = models.BooleanField(default=False)
+    comment_id = models.ForeignKey(Comment)
 
 
-class ToDos(models.Model):
+class ToDo(models.Model):
     user_id = models.ForeignKey(User, related_name='todo_parent')
     icon_id = models.CharField(max_length=255)
     text = models.TextField(blank=False, max_length=1000)

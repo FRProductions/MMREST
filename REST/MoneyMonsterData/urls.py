@@ -90,23 +90,13 @@ urlpatterns = format_suffix_patterns([
     # Comment urls
     ###
 
-    url(r'^video/(?P<pk>[0-9]+)/comments/list/$',
+    url(r'^video/comment/list/$',
         views.CommentList.as_view(),
-        name='comments-list'),
-    url(r'^video/(?P<pk>[0-9]+)/comments/detail/$',
+        name='comment-list'),
+    url(r'^video/(?P<pk>[0-9]+)/comment/detail/$',
         views.CommentDetail.as_view(),
-        name='comments-detail'),
+        name='comment-detail'),
 
-     ###
-    # Comment Info urls
-    ###
-
-    url(r'^video/(?P<pk>[0-9]+)/comments/info/list/$',
-        views.CommentInfoList.as_view(),
-        name='commentinfo-list'),
-    url(r'^video/(?P<pk>[0-9]+)/comments/info/detail/$',
-        views.CommentInfoDetail.as_view(),
-        name='commentinfo-detail'),
 ])
 
 # Login and logout views for the browsable API
