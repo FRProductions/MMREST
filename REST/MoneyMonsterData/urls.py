@@ -35,11 +35,11 @@ urlpatterns = format_suffix_patterns([
     ###
 
     url(r'^user/todo/$',
-        views.TodosList.as_view(),
-        name='todos-list'),
+        views.TodoList.as_view(),
+        name='todo-list'),
     url(r'^user/todo/(?P<pk>[0-9]+)/$',
-        views.TodosDetail.as_view(),
-        name='todos-detail'),
+        views.TodoDetail.as_view(),
+        name='todo-detail'),
 
     ###
     # Video urls

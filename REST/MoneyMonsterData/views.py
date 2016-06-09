@@ -113,7 +113,7 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 # To Do
 ###
 
-class TodosList(generics.ListCreateAPIView):
+class TodoList(generics.ListCreateAPIView):
     queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
 
@@ -123,10 +123,10 @@ class TodosList(generics.ListCreateAPIView):
         for the currently authenticated user.
         """
         user = self.request.user
-        return ToDos.objects.filter(user_id=user)
+        return ToDo.objects.filter(user_id=user)
 
 
-class TodosDetail(generics.RetrieveUpdateDestroyAPIView):
+class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
 
