@@ -99,5 +99,5 @@ class Profile(models.Model):
 def create_profile_data(sender, **kwargs):
     if kwargs.get('created', False):
         Profile.objects.create(user_id=kwargs.get('instance'), passed=0, failed=0, tasks=0, discussions=0)
-        ToDos.objects.create(user_id=kwargs.get('instance'), icon_id="mm-Button-trash-icon",
-                             text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))
+        ToDo.objects.create(user_id=kwargs.get('instance'), icon_id="mm-Button-trash-icon",
+                           text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))
