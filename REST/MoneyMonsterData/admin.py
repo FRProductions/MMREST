@@ -24,11 +24,11 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 class QuizInline(admin.StackedInline):
-    model = QuizResults
+    model = QuizResult
 
 
 class QuizQuestionsInline(admin.StackedInline):
-    model = QuizQuestions
+    model = QuizQuestion
 
 
 class QuizAdmin(admin.ModelAdmin):
@@ -49,6 +49,6 @@ class ProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Comment, CommentAdmin)
-admin.site.register(Quizzes, QuizAdmin)
+admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Profile)
 admin.site.register(ToDo)

@@ -11,6 +11,8 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    # TODO: for this user, get counts from different models:
+    #   quizzes passed, quizzes failed, todo count, discussion count
 
     class Meta:
         model = Profile
@@ -19,7 +21,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = QuizResults
+        model = QuizResult
 
 
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):
@@ -41,7 +43,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = QuizQuestions
+        model = QuizQuestion
         fields = ('question_text', 'answer',
                   'correct_answer', 'false_answer')
 
@@ -50,7 +52,7 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
     questions = QuizQuestionSerializer(source='quiz', many=True)
 
     class Meta:
-        model = Quizzes
+        model = Quiz
         fields = ('url', 'title', 'questions')
 
 

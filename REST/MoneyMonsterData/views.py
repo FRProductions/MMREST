@@ -49,12 +49,12 @@ class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class QuizList(generics.ListCreateAPIView):
-    queryset = Quizzes.objects.all()
+    queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
 
 
 class QuizDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Quizzes.objects.all()
+    queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
 
 
@@ -63,12 +63,12 @@ class QuizDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class QuizQuestionsList(generics.ListCreateAPIView):
-    queryset = QuizQuestions.objects.all()
+    queryset = QuizQuestion.objects.all()
     serializer_class = QuizQuestionSerializer
 
 
 class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuizQuestions.objects.all()
+    queryset = QuizQuestion.objects.all()
     serializer_class = QuizQuestionSerializer
 
 
@@ -149,7 +149,7 @@ class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class QuizResultsList(generics.ListCreateAPIView):
-    queryset = QuizResults.objects.all()
+    queryset = QuizResult.objects.all()
     serializer_class = QuizResultsSerializer
 
     def get_queryset(self):
@@ -158,9 +158,9 @@ class QuizResultsList(generics.ListCreateAPIView):
         for the currently authenticated user.
         """
         user = self.request.user
-        return QuizResults.objects.filter(user_id=user)
+        return QuizResult.objects.filter(user_id=user)
 
 
 class QuizResultsDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuizResults.objects.all()
+    queryset = QuizResult.objects.all()
     serializer_class = QuizResultsSerializer
