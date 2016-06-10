@@ -87,6 +87,19 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 ###
+# Comments Likes
+###
+
+class CommentLikeList(generics.ListCreateAPIView):
+    queryset = CommentLike.objects.all()
+    serializer_class = CommentSerializer
+
+class CommentLikeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CommentLike.objects.all()
+    serializer_class = CommentSerializer
+
+
+###
 #  Haps/Profile
 ###
 

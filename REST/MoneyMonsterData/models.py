@@ -21,8 +21,9 @@ class VideoStatus(models.Model):
     video_id = models.ForeignKey(Video)
     user_id = models.ForeignKey(User)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    quiz_finished = models.BooleanField(default=False)
     eye_status = models.BooleanField(default=False)
-    check_status = models.BooleanField(default=False)
+    quiz_passed = models.BooleanField(default=False)
 
 
 class Comment(models.Model):
@@ -40,7 +41,10 @@ class Comment(models.Model):
 
 class CommentLike(models.Model):
     user_id = models.ForeignKey(User)
-    comment_id = models.ForeignKey(Comment)
+    comment_id = models.ForeignKey(Comment, related_name='comment_parent')
+
+    class Meta:
+        unique_together = ("user_id", "comment_id")
 
 
 class ToDo(models.Model):
@@ -99,5 +103,5 @@ class Profile(models.Model):
 def create_profile_data(sender, **kwargs):
     if kwargs.get('created', False):
         Profile.objects.create(user_id=kwargs.get('instance'), passed=0, failed=0, tasks=0, discussions=0)
-        ToDos.objects.create(user_id=kwargs.get('instance'), icon_id="mm-Button-trash-icon",
-                             text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))
+        ToDo.objects.create(user_id=kwargs.get('instance'), icon_id="mm-Button-trash-icon",
+                            text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))

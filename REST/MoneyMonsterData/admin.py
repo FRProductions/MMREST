@@ -1,17 +1,26 @@
 from django.contrib import admin
 from .models import *
 
-class CommentsInLine(admin.StackedInline):
+
+class CommentLikeInLine(admin.StackedInline):
+    model = CommentLike
+
+
+class CommentInLine(admin.StackedInline):
     model = Comment
 
 
-# Video admin
+class CommentAdmin(admin.ModelAdmin):
+    inlines = [CommentLikeInLine]
+
+
 class VideoStatusInline(admin.StackedInline):
     model = VideoStatus
 
 
+# Video admin
 class VideoAdmin(admin.ModelAdmin):
-    inlines = [VideoStatusInline, CommentsInLine]
+    inlines = [VideoStatusInline, CommentInLine]
 
 
 class QuizInline(admin.StackedInline):
@@ -39,7 +48,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Video, VideoAdmin)
-admin.site.register(Comment)
+admin.site.register(Comment, CommentAdmin)
 admin.site.register(Quizzes, QuizAdmin)
 admin.site.register(Profile)
 admin.site.register(ToDo)

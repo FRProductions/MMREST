@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Video, Quizzes, QuizQuestions, Comment, Profile, ToDo, QuizResults
+from .models import *
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
@@ -54,12 +54,20 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'title', 'questions')
 
 
+class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = CommentLike
+        fields = ('user_id', 'comment_id')
+
+
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+    like_count = serializers.IntegerField(source='comment_parent.count', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('video_id', 'text', 'date_added', 'owner')
+        fields = ('video_id', 'text', 'date_added', 'owner', 'like_count')
 
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):

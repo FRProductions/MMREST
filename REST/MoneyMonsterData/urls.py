@@ -97,6 +97,18 @@ urlpatterns = format_suffix_patterns([
         views.CommentDetail.as_view(),
         name='comment-detail'),
 
+
+    ###
+    # Comment Like urls
+    ###
+
+    url(r'^video/comment/like/list/$',
+        views.CommentLikeList.as_view(),
+        name='commentlike-list'),
+    url(r'^video/(?P<pk>[0-9]+)/comment/like/detail/$',
+        views.CommentLikeDetail.as_view(),
+        name='commentlike-detail'),
+
 ])
 
 # Login and logout views for the browsable API
