@@ -72,16 +72,16 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('video', 'text', 'date_added', 'owner', 'like_count')
+        fields = ('url', 'text', 'date_added', 'owner', 'like_count')
 
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
     quiz = QuizSerializer(source='video', many=True)
-    comment = CommentSerializer(source='video_parent', many=True)
+    comments = CommentSerializer(many=True)
 
     class Meta:
         model = Video
-        fields = ('title', 'description', 'thumbnail_filename',
+        fields = ('id', 'title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
-                  'quiz', 'comment')
+                  'quiz', 'comments')
 

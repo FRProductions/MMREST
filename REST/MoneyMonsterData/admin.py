@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.contenttypes import admin as ct_admin
 from .models import *
 
 
@@ -6,7 +7,7 @@ class CommentLikeInLine(admin.StackedInline):
     model = CommentLike
 
 
-class CommentInLine(admin.StackedInline):
+class CommentInLine(ct_admin.GenericTabularInline):
     model = Comment
 
 
@@ -18,7 +19,6 @@ class VideoStatusInline(admin.StackedInline):
     model = VideoStatus
 
 
-# Video admin
 class VideoAdmin(admin.ModelAdmin):
     inlines = [VideoStatusInline, CommentInLine]
 

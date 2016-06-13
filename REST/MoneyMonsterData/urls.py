@@ -74,7 +74,7 @@ urlpatterns = format_suffix_patterns([
         views.QuizQuestionsDetail.as_view(),
         name='quizquestions-detail'),
 
-     ###
+    ###
     # Quiz results urls
     ###
 
@@ -90,10 +90,10 @@ urlpatterns = format_suffix_patterns([
     # Comment urls
     ###
 
-    url(r'^video/comment/list/$',
+    url(r'^comment/$',
         views.CommentList.as_view(),
         name='comment-list'),
-    url(r'^video/(?P<pk>[0-9]+)/comment/detail/$',
+    url(r'^comment/(?P<pk>[0-9]+)/$',
         views.CommentDetail.as_view(),
         name='comment-detail'),
 
