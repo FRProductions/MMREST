@@ -18,15 +18,15 @@ class Video(models.Model):
 
 
 class VideoStatus(models.Model):
-    video_id = models.ForeignKey(Video)
-    user_id = models.ForeignKey(User)
+    video = models.ForeignKey(Video)
+    user = models.ForeignKey(User)
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     completed = models.BooleanField(default=False)
 
 
 class Comment(models.Model):
-    video_id = models.ForeignKey(Video, related_name='video_parent')
-    owner = models.ForeignKey('auth.User')
+    video = models.ForeignKey(Video, related_name='video_parent')
+    owner = models.ForeignKey('auth.User', related_name='comment_parent')
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -34,71 +34,59 @@ class Comment(models.Model):
         ordering = ('date_added',)
 
     def __str__(self):
-        return self.video_id.title
+        return self.video.title
 
 
 class CommentLike(models.Model):
-    user_id = models.ForeignKey(User)
-    comment_id = models.ForeignKey(Comment, related_name='comment_parent')
+    user = models.ForeignKey(User)
+    comment = models.ForeignKey(Comment, related_name='like_parent')
 
     class Meta:
-        unique_together = ("user_id", "comment_id")
+        unique_together = ("user", "comment")
 
 
 class ToDo(models.Model):
-    user_id = models.ForeignKey(User, related_name='todo_parent')
-    icon_id = models.CharField(max_length=255)
+    user = models.ForeignKey(User, related_name='todo_parent')
+    icon = models.CharField(max_length=255)
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
     date_completed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user_id.username + ' - TodDos'
+        return self.user.username + ' - TodDos'
 
 
 class Quiz(models.Model):
-    video_id = models.ForeignKey(Video, related_name='video')
+    video = models.ForeignKey(Video, related_name='video')
     title = models.CharField(max_length=255)
 
     def __str__(self):
-        return 'Video:' + self.video_id.title + ' - Quiz: ' + self.title
+        return 'Video:' + self.video.title + ' - Quiz: ' + self.title
 
 
 class QuizQuestion(models.Model):
-    quiz_id = models.ForeignKey(Quiz, related_name='quiz')
+    quiz = models.ForeignKey(Quiz, related_name='quiz')
     question_text = models.TextField(blank=False, max_length=1000)
     answer = models.BooleanField(default=False)
     correct_message = models.TextField(blank=False, max_length=1000)
     false_message = models.TextField(blank=False, max_length=1000)
 
     def __str__(self):
-        return 'Question: ' + self.quiz_id.title + ': ' + self.question_text
+        return 'Question: ' + self.quiz.title + ': ' + self.question_text
 
 
 class QuizResult(models.Model):
-    quiz_id = models.ForeignKey(Quiz)
-    user_id = models.ForeignKey(User, related_name='quiz_parent')
+    quiz = models.ForeignKey(Quiz)
+    user = models.ForeignKey(User, related_name='quiz_parent')
     percent_correct = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return 'Quiz Results for : ' + self.quiz_id.title
-
-
-class Profile(models.Model):
-    user_id = models.ForeignKey(User, related_name='User')
-    passed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0)
-    failed = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0)
-    tasks = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)], default=0)
-    discussions = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(1000)], default=0)
-
-    def __str__(self):
-        return self.user_id.username + ' profile'
+        return 'Quiz Results for : ' + self.quiz.title
 
 
 @receiver(post_save, sender=User)
 def create_profile_data(sender, **kwargs):
     if kwargs.get('created', False):
-        Profile.objects.create(user_id=kwargs.get('instance'), passed=0, failed=0, tasks=0, discussions=0)
-        ToDo.objects.create(user_id=kwargs.get('instance'), icon_id="mm-Button-trash-icon",
+        ToDo.objects.create(user=kwargs.get('instance'), icon="mm-Button-trash-icon",
                             text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))

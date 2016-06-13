@@ -39,16 +39,7 @@ class ToDoInLine(admin.StackedInline):
     model = ToDo
 
 
-class ProfileInLine(admin.StackedInline):
-    model = Profile
-
-
-class ProfileAdmin(admin.ModelAdmin):
-    inlines = [ProfileInLine, ToDoInLine]
-
-
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Quiz, QuizAdmin)
-admin.site.register(Profile)
 admin.site.register(ToDo)

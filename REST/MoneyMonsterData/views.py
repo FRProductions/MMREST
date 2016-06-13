@@ -15,10 +15,10 @@ def api_root(request, format=None):
         'videos': reverse('video-list', request=request, format=format),
     })
 
-
 ###
 # User
 ###
+
 
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -94,37 +94,39 @@ class CommentLikeList(generics.ListCreateAPIView):
     queryset = CommentLike.objects.all()
     serializer_class = CommentSerializer
 
+
 class CommentLikeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CommentLike.objects.all()
     serializer_class = CommentSerializer
 
 
 ###
-#  Haps/Profile
+#  Profile
 ###
 
 class ProfileList(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    queryset = Profile.objects.all()
+    # permission_classes = (permissions.IsAuthenticated,)
+    queryset = User.objects.all()
     serializer_class = ProfileSerializer
 
-    def get_queryset(self):
-        """
-        This view should return a list of profile data
-        for the currently authenticated user.
-        """
-        user = self.request.user
-        return Profile.objects.filter(user_id=user)
+    # def get_queryset(self):
+    #     """
+    #     This view should return a list of profile data
+    #     for the currently authenticated user.
+    #     """
+    #     user = self.request.user
+    #     return User.objects.filter(user_id=user)
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Profile.objects.all()
+    queryset = User.objects.all()
     serializer_class = ProfileSerializer
 
 
 ###
 # To Do
 ###
+
 
 class TodoList(generics.ListCreateAPIView):
     queryset = ToDo.objects.all()

@@ -13,9 +13,13 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     # TODO: for this user, get counts from different models:
     #   quizzes passed, quizzes failed, todo count, discussion count
+    todo_count = serializers.IntegerField(source='todo_parent.count', read_only=True)
+    discussion_count = serializers.IntegerField(source='comment_parent.count', read_only=True)
+    quiz_passed = serializers.IntegerField(source='quiz_parent.count', read_only=True)
 
     class Meta:
-        model = Profile
+        model = User
+        fields = ('todo_count', 'discussion_count', 'quiz_passed', 'username', )
 
 
 class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
@@ -28,24 +32,23 @@ class ToDosSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ToDo
-        fields = ('url', 'user_id', 'icon_id', 'text', 'date_added', 'date_completed')
+        fields = ('url', 'user', 'icon', 'text', 'date_added', 'date_completed')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     to_do = ToDosSerializer(source='todo_parent', many=True)
-    profile = ProfileSerializer(source='User', many=True)
     quiz_results = QuizResultsSerializer(source='quiz_parent', many=True)
 
     class Meta:
         model = User
-        fields = ('url', 'username', 'id', 'profile', 'quiz_results', 'to_do')
+        fields = ('url', 'username', 'id', 'quiz_results', 'to_do')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = QuizQuestion
         fields = ('question_text', 'answer',
-                  'correct_answer', 'false_answer')
+                  'correct_message', 'false_message')
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
@@ -60,16 +63,16 @@ class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = CommentLike
-        fields = ('user_id', 'comment_id')
+        fields = ('user', 'comment')
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    like_count = serializers.IntegerField(source='comment_parent.count', read_only=True)
+    like_count = serializers.IntegerField(source='like_parent.count', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('video_id', 'text', 'date_added', 'owner', 'like_count')
+        fields = ('video', 'text', 'date_added', 'owner', 'like_count')
 
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
