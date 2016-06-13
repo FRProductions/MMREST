@@ -102,12 +102,12 @@ urlpatterns = format_suffix_patterns([
     # Comment Like urls
     ###
 
-    url(r'^video/comment/like/list/$',
-        views.CommentLikeList.as_view(),
-        name='commentlike-list'),
-    url(r'^video/(?P<pk>[0-9]+)/comment/like/detail/$',
-        views.CommentLikeDetail.as_view(),
-        name='commentlike-detail'),
+    # url(r'^comment/like/$',
+    #     views.CommentLikeList.as_view(),
+    #     name='commentlike-list'),
+    # url(r'^comment/like/(?P<pk>[0-9]+)/$',
+    #     views.CommentLikeDetail.as_view(),
+    #     name='commentlike-detail'),
 
 ])
 
