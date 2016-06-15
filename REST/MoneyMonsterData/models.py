@@ -33,14 +33,10 @@ class VideoStatus(models.Model):
         unique_together = ("video", "user")
 
 
-# a user comment, which may be attached to other models (video, quiz, another comment, etc.)
+# a user comment, which may be attached to other app models (video, quiz, another comment, etc.)
 class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE,
-                                     limit_choices_to=
-                                     models.Q(app_label='MoneyMonsterData', model='video') |
-                                     models.Q(app_label='MoneyMonsterData', model='quiz') |
-                                     models.Q(app_label='MoneyMonsterData', model='comment')
-                                     )
+                                     limit_choices_to=models.Q(app_label='MoneyMonsterData'))
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     owner = models.ForeignKey(User)
