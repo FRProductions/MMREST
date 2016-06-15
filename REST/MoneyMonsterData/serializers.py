@@ -79,25 +79,23 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     def validate_content_type(self, value):
         """
-        Check that the content_type serialized value is a valid model name for this app
+        Field Validation: Check that the content_type serialized value is a valid model name for this app
         """
         try:
-            app_label = self.Meta.model._meta.app_label
-            apps.get_model(app_label=app_label, model_name=value)  # Raises LookupError if model not found
+            self.get_app_model(value)
             return value
-        except:
+        except LookupError:
             raise serializers.ValidationError("not a valid model name")
 
     def validate(self, data):
         """
-        Check that the object_id refers to a valid object.
+        General Validation: Check that the object_id refers to a valid object.
         """
-        app_label = self.Meta.model._meta.app_label                             # label of this app
         model_name = data['content_type']['model']
-        model = apps.get_model(app_label=app_label, model_name=model_name)      # content_type already validated
+        model = self.get_app_model(model_name)  # already validated
         object_id = data['object_id']
         try:
-            model.objects.get(id=object_id)                                     # attempt lookup
+            model.objects.get(id=object_id)
         except ObjectDoesNotExist:
             raise serializers.ValidationError("no %s found with id %i" % (model_name, object_id))
         return data
@@ -106,10 +104,24 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         """
         Replace 'content_type' model name with real ContentType object
         """
-        app_label = self.Meta.model._meta.app_label
-        model = apps.get_model(app_label=app_label, model_name=validated_data['content_type']['model'])
+        model = self.get_app_model(validated_data['content_type']['model'])
         validated_data['content_type'] = ContentType.objects.get_for_model(model)
         return Comment.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        """
+        Replace 'content_type' model name with real ContentType object
+        """
+        model = self.get_app_model(validated_data['content_type']['model'])
+        validated_data['content_type'] = ContentType.objects.get_for_model(model)
+        return super(CommentSerializer, self).update(instance, validated_data)
+
+    def get_app_model(self, model_name):
+        """
+        Get ContentType object for the given app model name
+        """
+        app_label = self.Meta.model._meta.app_label                         # label of this app
+        return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
 
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
