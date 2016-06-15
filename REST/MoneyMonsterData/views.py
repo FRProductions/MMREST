@@ -1,11 +1,11 @@
-from .models import *
-from .serializers import *
-from django.contrib.auth.models import User
 from rest_framework import generics
+from rest_framework import permissions
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.decorators import api_view
-from rest_framework import permissions
+
+from .permissions import IsOwnerOrReadOnly
+from .serializers import *
 
 
 @api_view(['GET'])
@@ -77,11 +77,16 @@ class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class CommentList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # authenticated users can view all comments
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
-class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+
+class CommentDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the comment owner can edit
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -90,14 +95,14 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 # Comments Likes
 ###
 
-class CommentLikeList(generics.ListCreateAPIView):
-    queryset = CommentLike.objects.all()
-    serializer_class = CommentSerializer
-
-
-class CommentLikeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CommentLike.objects.all()
-    serializer_class = CommentSerializer
+# class CommentLikeList(generics.ListCreateAPIView):
+#     queryset = CommentLike.objects.all()
+#     serializer_class = CommentSerializer
+#
+#
+# class CommentLikeDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = CommentLike.objects.all()
+#     serializer_class = CommentSerializer
 
 
 ###
