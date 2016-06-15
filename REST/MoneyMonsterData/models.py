@@ -43,7 +43,7 @@ class Comment(models.Model):
                                      )
     object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, related_name='comment_parent')
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -63,7 +63,7 @@ class CommentLike(models.Model):
         unique_together = ("user", "comment")
 
 
-# a user ToDo item
+# a user To Do item
 class ToDo(models.Model):
     user = models.ForeignKey(User, related_name='todo_parent')
     icon = models.CharField(max_length=255)
@@ -102,9 +102,14 @@ class QuizResult(models.Model):
     user = models.ForeignKey(User, related_name='quiz_parent')
     percent_correct = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     date = models.DateTimeField(auto_now_add=True)
+    correct = 0
 
     def passed(self):
-        return self.percent_correct >= 0.8
+        correct = self.percent_correct >= 0.8
+        if correct is True:
+            return True
+        else:
+            return False
 
     def __str__(self):
         return 'Quiz Results for : ' + self.quiz.title

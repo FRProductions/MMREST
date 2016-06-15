@@ -10,22 +10,22 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('title', 'url', 'thumbnail_filename')
 
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    # TODO: for this user, get counts from different models:
-    #   quizzes passed, quizzes failed, todo count, discussion count
-    todo_count = serializers.IntegerField(source='todo_parent.count', read_only=True)
-    discussion_count = serializers.IntegerField(source='comment_parent.count', read_only=True)
-    quiz_passed = serializers.IntegerField(source='quiz_parent.count', read_only=True)
-
-    class Meta:
-        model = User
-        fields = ('todo_count', 'discussion_count', 'quiz_passed', 'username', )
-
-
 class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
+    quiz_score = serializers.ReadOnlyField(source="passed")
 
     class Meta:
         model = QuizResult
+        fields = ('quiz_score', )
+
+
+class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    todo_count = serializers.IntegerField(source='todo_parent.count', read_only=True)
+    discussion_count = serializers.IntegerField(source='comment_parent.count', read_only=True)
+    quiz_results = QuizResultsSerializer(source='quiz_parent', many=True)
+
+    class Meta:
+        model = User
+        fields = ('todo_count', 'discussion_count', 'quiz_results', 'username')
 
 
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):
@@ -77,11 +77,11 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
     quiz = QuizSerializer(source='video', many=True)
-    comments = CommentSerializer(many=True)
+    # comments = CommentSerializer(many=True)
 
     class Meta:
         model = Video
         fields = ('id', 'title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
-                  'quiz', 'comments')
+                  'quiz')
 

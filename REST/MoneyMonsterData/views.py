@@ -105,17 +105,17 @@ class CommentLikeDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class ProfileList(generics.ListCreateAPIView):
-    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = ProfileSerializer
 
-    # def get_queryset(self):
-    #     """
-    #     This view should return a list of profile data
-    #     for the currently authenticated user.
-    #     """
-    #     user = self.request.user
-    #     return User.objects.filter(user_id=user)
+    def get_queryset(self):
+        """
+        This view should return a list of profile data
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return User.objects.filter(user_id=user)
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
