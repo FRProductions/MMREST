@@ -36,12 +36,12 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class VideoList(generics.ListCreateAPIView):
     queryset = Video.objects.all()
-    serializer_class = VideoSerializer
+    serializer_class = VideoSummarySerializer
 
 
 class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
-    serializer_class = VideoDataSerializer
+    serializer_class = VideoDetailSerializer
 
 
 ###

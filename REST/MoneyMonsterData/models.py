@@ -98,7 +98,6 @@ class QuizResult(models.Model):
     user = models.ForeignKey(User, related_name='quiz_parent')
     percent_correct = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     date = models.DateTimeField(auto_now_add=True)
-    correct = 0
 
     def passed(self):
         return self.percent_correct >= 0.8
