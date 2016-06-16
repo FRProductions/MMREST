@@ -5,13 +5,6 @@ from rest_framework import serializers
 from .models import *
 
 
-class VideoSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Video
-        fields = ('title', 'url', 'thumbnail_filename')
-
-
 class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
     quiz_score = serializers.ReadOnlyField(source="passed")
 
@@ -124,13 +117,19 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
 
 
-class VideoDataSerializer(serializers.HyperlinkedModelSerializer):
+class VideoSummarySerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Video
+        fields = ('title', 'url', 'thumbnail_filename')
+
+
+class VideoDetailSerializer(serializers.HyperlinkedModelSerializer):
     quiz = QuizSerializer(source='video', many=True)
     comments = CommentSerializer(many=True)
 
     class Meta:
         model = Video
-        fields = ('id', 'title', 'description', 'thumbnail_filename',
+        fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
                   'quiz', 'comments')
-
