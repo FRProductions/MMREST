@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Avg
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -17,6 +18,14 @@ class Video(models.Model):
     rtmp_server_url = models.CharField(max_length=255)
     rtmp_stream_name = models.CharField(max_length=255)
     comments = GenericRelation('Comment')
+
+    def rating(self):
+        objlst = VideoStatus.objects.filter(video=self)
+        if objlst.count() == 0:
+            return 0.0
+        ratavg = objlst.aggregate(Avg('rating')).values()[0]
+        ratavg = max(min(ratavg, 5.0), 0.0)  # clamp
+        return ratavg
 
     def __str__(self):
         return self.title + ' video'

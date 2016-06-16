@@ -121,7 +121,7 @@ class VideoSummarySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('title', 'url', 'thumbnail_filename')
+        fields = ('title', 'url', 'rating', 'thumbnail_filename')
 
 
 class VideoDetailSerializer(serializers.HyperlinkedModelSerializer):
@@ -131,5 +131,5 @@ class VideoDetailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Video
         fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
-                  'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
+                  'hls_url', 'rtmp_server_url', 'rtmp_stream_name', 'rating',
                   'quiz', 'comments')
