@@ -101,11 +101,7 @@ class QuizResult(models.Model):
     correct = 0
 
     def passed(self):
-        correct = self.percent_correct >= 0.8
-        if correct is True:
-            return True
-        else:
-            return False
+        return self.percent_correct >= 0.8
 
     def __str__(self):
         return 'Quiz Results for : ' + self.quiz.title
