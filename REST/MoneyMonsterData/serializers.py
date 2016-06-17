@@ -117,26 +117,30 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
 
 
+class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedRelatedField(
+        source='video', view_name='videostatus-detail', read_only=True)
+
+    class Meta:
+        model = VideoStatus
+        fields = ('url', 'rating', 'completed')
+
+
 class VideoSummarySerializer(serializers.HyperlinkedModelSerializer):
+    user_video_status = VideoStatusSerializer(source='videostatus_set', many=True)
 
     class Meta:
         model = Video
-        fields = ('title', 'url', 'rating', 'thumbnail_filename')
+        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_video_status')
 
 
 class VideoDetailSerializer(serializers.HyperlinkedModelSerializer):
     quiz = QuizSerializer(source='quiz_set', many=True)
     comments = CommentSerializer(many=True)
+    user_video_status = VideoStatusSerializer(source='videostatus_set', many=True)
 
     class Meta:
         model = Video
-        fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
-                  'hls_url', 'rtmp_server_url', 'rtmp_stream_name', 'rating',
+        fields = ('url', 'id', 'title', 'description', 'thumbnail_filename', 'rating', 'user_video_status',
+                  'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
                   'quiz', 'comments')
-
-
-class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = VideoStatus
-        fields = ('rating', 'completed')
