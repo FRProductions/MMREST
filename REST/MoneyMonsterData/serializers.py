@@ -140,10 +140,3 @@ class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = VideoStatus
         fields = ('rating', 'completed')
-
-    def create(self, validated_data):
-        user = self.context['request'].user
-        video = self.context['view'].related_video
-        return VideoStatus.objects.create(user=user, video=video,
-                                          rating=validated_data['rating'],
-                                          completed=validated_data['completed'])

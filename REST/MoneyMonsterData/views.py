@@ -55,20 +55,19 @@ class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView, CreateModelMixin)
     permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the owner can view / edit
     serializer_class = VideoStatusSerializer
 
-    def __init__(self):
-        self.related_video = None
-        super(VideoStatusDetail, self).__init__()
-
     def get_object(self):
-        # get and save the related Video (video id is in url)
-        self.related_video = get_object_or_404(Video, pk=self.kwargs['pk'])
+        # get related Video object (video id is in url)
+        video = get_object_or_404(Video, pk=self.kwargs['pk'])
+
         # get the VideoStatus object that matches the video and currently authenticated user (should be only one)
-        return get_object_or_404(VideoStatus, video=self.related_video, user=self.request.user)
+        return get_object_or_404(VideoStatus, video=video, user=self.request.user)
 
     def post(self, request, *args, **kwargs):
-        # get and save the related Video (video id is in url)
-        self.related_video = get_object_or_404(Video, pk=self.kwargs['pk'])
         return self.create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        video = get_object_or_404(Video, pk=self.kwargs['pk'])
+        serializer.save(user=self.request.user, video=video)
 
 
 ###
