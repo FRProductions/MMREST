@@ -53,6 +53,14 @@ urlpatterns = format_suffix_patterns([
         name='video-detail'),
 
     ###
+    # Video status urls
+    ###
+
+    url(r'^video/(?P<pk>[0-9]+)/status/$',
+        views.VideoStatusDetail.as_view(),
+        name='videostatus-detail'),
+
+    ###
     # Quiz urls
     ###
 

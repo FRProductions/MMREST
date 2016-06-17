@@ -62,7 +62,7 @@ class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
+    owner = serializers.ReadOnlyField(source='user.username')
     like_count = serializers.IntegerField(source='commentlike_set.count', read_only=True)
     content_type = serializers.CharField(source='content_type.model')
 
@@ -133,3 +133,10 @@ class VideoDetailSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name', 'rating',
                   'quiz', 'comments')
+
+
+class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = VideoStatus
+        fields = ('rating', 'completed')

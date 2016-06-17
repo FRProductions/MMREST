@@ -41,6 +41,9 @@ class VideoStatus(models.Model):
     class Meta:
         unique_together = ("video", "user")
 
+    def __str__(self):
+        return 'VideoStatus(video=' + self.video.title + ', user=' + self.user.username + ')'
+
 
 # a user comment, which may be attached to other app models (video, quiz, another comment, etc.)
 class Comment(models.Model):
@@ -48,7 +51,7 @@ class Comment(models.Model):
                                      limit_choices_to=models.Q(app_label='MoneyMonsterData'))
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
-    owner = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -56,7 +59,7 @@ class Comment(models.Model):
         ordering = ('date_added',)
 
     def __str__(self):
-        return self.owner.username + ': ' + self.text
+        return self.user.username + ': ' + self.text
 
 
 # a user "like" on another user's comment

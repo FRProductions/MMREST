@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.decorators import api_view
@@ -13,6 +14,7 @@ def api_root(request, format=None):
     return Response({
         'users': reverse('user-list', request=request, format=format),
         'videos': reverse('video-list', request=request, format=format),
+        'comments': reverse('comment-list', request=request, format=format),
     })
 
 ###
@@ -42,6 +44,28 @@ class VideoList(generics.ListCreateAPIView):
 class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoDetailSerializer
+
+
+###
+# Video Status
+###
+
+class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the owner can view / edit
+    serializer_class = VideoStatusSerializer
+
+    def get_object(self):
+
+        # get the video (video id is in url) and user (currently authenticated)
+        video = get_object_or_404(Video, pk=self.kwargs['pk'])
+        user = self.request.user
+
+        # lookup the VideoStatus object that matches the video and user (should be only 1 if found)
+        queryset = VideoStatus.objects.filter(video=video, user=user)
+        if queryset.count() == 1:
+            return queryset[0]                              # return existing VideoStatus object instance
+        else:
+            return VideoStatus(video=video, user=user)      # return new VideoStatus object instance
 
 
 ###
