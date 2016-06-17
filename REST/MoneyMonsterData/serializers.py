@@ -15,7 +15,7 @@ class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     todo_count = serializers.IntegerField(source='todo_parent.count', read_only=True)
-    discussion_count = serializers.IntegerField(source='comment_parent.count', read_only=True)
+    discussion_count = serializers.IntegerField(source='comment_set.count', read_only=True)
     quiz_results = QuizResultsSerializer(source='quiz_parent', many=True)
 
     class Meta:
@@ -63,7 +63,7 @@ class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    like_count = serializers.IntegerField(source='like_parent.count', read_only=True)
+    like_count = serializers.IntegerField(source='commentlike_set.count', read_only=True)
     content_type = serializers.CharField(source='content_type.model')
 
     class Meta:

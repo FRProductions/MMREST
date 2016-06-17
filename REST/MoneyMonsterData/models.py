@@ -48,7 +48,7 @@ class Comment(models.Model):
                                      limit_choices_to=models.Q(app_label='MoneyMonsterData'))
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
-    owner = models.ForeignKey(User, related_name='comment_parent')
+    owner = models.ForeignKey(User)
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -62,7 +62,7 @@ class Comment(models.Model):
 # a user "like" on another user's comment
 class CommentLike(models.Model):
     user = models.ForeignKey(User)
-    comment = models.ForeignKey(Comment, related_name='like_parent')
+    comment = models.ForeignKey(Comment)
 
     class Meta:
         unique_together = ("user", "comment")
