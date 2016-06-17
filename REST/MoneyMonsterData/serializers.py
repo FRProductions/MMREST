@@ -14,9 +14,9 @@ class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    todo_count = serializers.IntegerField(source='todo_parent.count', read_only=True)
+    todo_count = serializers.IntegerField(source='todo_set.count', read_only=True)
     discussion_count = serializers.IntegerField(source='comment_set.count', read_only=True)
-    quiz_results = QuizResultsSerializer(source='quiz_parent', many=True)
+    quiz_results = QuizResultsSerializer(source='quizresult_set', many=True)
 
     class Meta:
         model = User
@@ -31,8 +31,8 @@ class ToDosSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    to_do = ToDosSerializer(source='todo_parent', many=True)
-    quiz_results = QuizResultsSerializer(source='quiz_parent', many=True)
+    to_do = ToDosSerializer(source='todo_set', many=True)
+    quiz_results = QuizResultsSerializer(source='quizresult_set', many=True)
 
     class Meta:
         model = User
@@ -47,7 +47,7 @@ class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
-    questions = QuizQuestionSerializer(source='quiz', many=True)
+    questions = QuizQuestionSerializer(source='quizquestion_set', many=True)
 
     class Meta:
         model = Quiz
@@ -125,7 +125,7 @@ class VideoSummarySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoDetailSerializer(serializers.HyperlinkedModelSerializer):
-    quiz = QuizSerializer(source='video', many=True)
+    quiz = QuizSerializer(source='quiz_set', many=True)
     comments = CommentSerializer(many=True)
 
     class Meta:

@@ -73,7 +73,7 @@ class CommentLike(models.Model):
 
 # a user To Do item
 class ToDo(models.Model):
-    user = models.ForeignKey(User, related_name='todo_parent')
+    user = models.ForeignKey(User)
     icon = models.CharField(max_length=255)
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -85,7 +85,7 @@ class ToDo(models.Model):
 
 # a quiz, which is always related to a video
 class Quiz(models.Model):
-    video = models.ForeignKey(Video, related_name='video')
+    video = models.ForeignKey(Video)
     title = models.CharField(max_length=255)
 
     def __str__(self):
@@ -94,7 +94,7 @@ class Quiz(models.Model):
 
 # a quiz question, part of a quiz
 class QuizQuestion(models.Model):
-    quiz = models.ForeignKey(Quiz, related_name='quiz')
+    quiz = models.ForeignKey(Quiz)
     question_text = models.TextField(blank=False, max_length=1000)
     answer = models.BooleanField(default=False)
     correct_message = models.TextField(blank=False, max_length=1000)
@@ -107,7 +107,7 @@ class QuizQuestion(models.Model):
 # a user's quiz result
 class QuizResult(models.Model):
     quiz = models.ForeignKey(Quiz)
-    user = models.ForeignKey(User, related_name='quiz_parent')
+    user = models.ForeignKey(User)
     percent_correct = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     date = models.DateTimeField(auto_now_add=True)
 
