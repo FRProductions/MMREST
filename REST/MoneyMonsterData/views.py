@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.decorators import api_view
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
@@ -50,22 +51,24 @@ class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
 # Video Status
 ###
 
-class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView):
+class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView, CreateModelMixin):
     permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the owner can view / edit
     serializer_class = VideoStatusSerializer
 
+    def __init__(self):
+        self.related_video = None
+        super(VideoStatusDetail, self).__init__()
+
     def get_object(self):
+        # get and save the related Video (video id is in url)
+        self.related_video = get_object_or_404(Video, pk=self.kwargs['pk'])
+        # get the VideoStatus object that matches the video and currently authenticated user (should be only one)
+        return get_object_or_404(VideoStatus, video=self.related_video, user=self.request.user)
 
-        # get the video (video id is in url) and user (currently authenticated)
-        video = get_object_or_404(Video, pk=self.kwargs['pk'])
-        user = self.request.user
-
-        # lookup the VideoStatus object that matches the video and user (should be only 1 if found)
-        queryset = VideoStatus.objects.filter(video=video, user=user)
-        if queryset.count() == 1:
-            return queryset[0]                              # return existing VideoStatus object instance
-        else:
-            return VideoStatus(video=video, user=user)      # return new VideoStatus object instance
+    def post(self, request, *args, **kwargs):
+        # get and save the related Video (video id is in url)
+        self.related_video = get_object_or_404(Video, pk=self.kwargs['pk'])
+        return self.create(request, *args, **kwargs)
 
 
 ###
