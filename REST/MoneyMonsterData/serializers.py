@@ -123,24 +123,45 @@ class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = VideoStatus
-        fields = ('url', 'rating', 'completed')
+        fields = ('url', 'user', 'rating', 'completed')
 
 
-class VideoSummarySerializer(serializers.HyperlinkedModelSerializer):
-    user_video_status = VideoStatusSerializer(source='videostatus_set', many=True)
+class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    A method to provide the value for the 'user_completed' field.
+    Looks up the VideoStatus record for the current user and video.
+    """
+    def get_user_completed(self, obj):
+
+        # get current user and video
+        user = self.context['request'].user
+        if not user.is_authenticated():
+            return "not authenticated"
+        video = obj
+
+        # lookup VideoStatus instance, if it exists
+        try:
+            video_status = VideoStatus.objects.get(user=user, video=video)
+            return video_status.completed
+        except VideoStatus.DoesNotExist:
+            return False
+
+
+class VideoSummarySerializer(VideoBaseSerializer):
+    user_completed = serializers.SerializerMethodField()
 
     class Meta:
         model = Video
-        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_video_status')
+        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_completed')
 
 
-class VideoDetailSerializer(serializers.HyperlinkedModelSerializer):
+class VideoDetailSerializer(VideoBaseSerializer):
     quiz = QuizSerializer(source='quiz_set', many=True)
     comments = CommentSerializer(many=True)
-    user_video_status = VideoStatusSerializer(source='videostatus_set', many=True)
+    user_completed = serializers.SerializerMethodField()
 
     class Meta:
         model = Video
         fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
-                  'rating', 'user_video_status', 'quiz', 'comments')
+                  'rating', 'user_completed', 'quiz', 'comments')
