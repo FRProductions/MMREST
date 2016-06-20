@@ -28,7 +28,7 @@ class Video(models.Model):
         return ratavg
 
     def __str__(self):
-        return self.title + ' video'
+        return 'Video(title:' + self.title + ')'
 
 
 # video status for a particular user
@@ -43,7 +43,7 @@ class VideoStatus(models.Model):
         unique_together = ("video", "user")
 
     def __str__(self):
-        return 'VideoStatus(video=' + self.video.title + ', user=' + self.user.username + ')'
+        return 'VideoStatus(video:' + self.video.title + ', user:' + self.user.username + ')'
 
 
 # a user comment, which may be attached to other app models (video, quiz, another comment, etc.)
@@ -60,7 +60,7 @@ class Comment(models.Model):
         ordering = ('date_added',)
 
     def __str__(self):
-        return self.user.username + ': ' + self.text
+        return 'Comment(user:' + self.user.username + ', text:' + self.text + ')'
 
 
 # a user "like" on another user's comment
@@ -81,7 +81,7 @@ class ToDo(models.Model):
     date_completed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username + ' - TodDos'
+        return 'ToDo(user:' + self.user.username + ')'
 
 
 # a quiz, which is always related to a video
@@ -90,7 +90,7 @@ class Quiz(models.Model):
     title = models.CharField(max_length=255)
 
     def __str__(self):
-        return 'Video:' + self.video.title + ' - Quiz: ' + self.title
+        return 'Quiz(video:' + self.video.title + ', title:' + self.title + ')'
 
 
 # a quiz question, part of a quiz
@@ -102,7 +102,7 @@ class QuizQuestion(models.Model):
     false_message = models.TextField(blank=False, max_length=1000)
 
     def __str__(self):
-        return 'Question: ' + self.quiz.title + ': ' + self.question_text
+        return 'QuizQuestion(quiz:' + self.quiz.title + ', text:' + self.question_text + ')'
 
 
 # a user's quiz result
@@ -116,7 +116,8 @@ class QuizResult(models.Model):
         return self.percent_correct >= 0.8
 
     def __str__(self):
-        return 'Quiz Results for : ' + self.quiz.title
+        return 'QuizResult(quiz:' + self.quiz.title + ', user:' + self.user.username +\
+               ', percent_correct:' + str(self.percent_correct) + ')'
 
 
 # function that runs after a User was created
