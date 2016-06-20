@@ -35,8 +35,9 @@ class Video(models.Model):
 class VideoStatus(models.Model):
     video = models.ForeignKey(Video)
     user = models.ForeignKey(User)
-    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-    completed = models.BooleanField(default=False)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)],
+                                 default=None, null=True, blank=True)
+    completed = models.BooleanField(default=False, blank=True)
 
     class Meta:
         unique_together = ("video", "user")

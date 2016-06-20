@@ -118,12 +118,11 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedRelatedField(
-        source='video', view_name='videostatus-detail', read_only=True)
+    user = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True, required=False)
 
     class Meta:
         model = VideoStatus
-        fields = ('url', 'user', 'rating', 'completed')
+        fields = ('user', 'rating', 'completed')
 
 
 class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
