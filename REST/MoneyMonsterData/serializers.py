@@ -126,14 +126,14 @@ class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
-    user_completed = serializers.SerializerMethodField()
+    user_video_completed = serializers.SerializerMethodField()
     user_video_status = serializers.HyperlinkedIdentityField(view_name='videostatus-detail', read_only=True)
+    user_quiz_passed = serializers.SerializerMethodField()
 
     """
-    A method to provide the value for the 'user_completed' field.
-    Looks up the VideoStatus record for the current user and video.
+    Looks up the VideoStatus record for the current user and video and returns the 'completed' boolean.
     """
-    def get_user_completed(self, obj):
+    def get_user_video_completed(self, obj):
 
         # get current user and video
         user = self.context['request'].user
@@ -148,11 +148,34 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
         except VideoStatus.DoesNotExist:
             return False
 
+    """
+    Looks up the QuizResult record for the current user and video/quiz and returns the 'passed' boolean.
+    """
+    def get_user_quiz_passed(self, obj):
+        # get current user
+        user = self.context['request'].user
+        if not user.is_authenticated():
+            return "not authenticated"
+
+        # get quiz related to video
+        try:
+            quiz = Quiz.objects.get(video=obj)
+        except Quiz.DoesNotExist:
+            return None
+
+        # lookup QuizResult instance, if it exists
+        try:
+            quiz_result = QuizResult.objects.get(user=user, quiz=quiz)
+            return quiz_result.passed()
+        except QuizResult.DoesNotExist:
+            return None
+
 
 class VideoSummarySerializer(VideoBaseSerializer):
     class Meta:
         model = Video
-        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_completed', 'user_video_status')
+        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_video_completed', 'user_video_status',
+                  'user_quiz_passed')
 
 
 class VideoDetailSerializer(VideoBaseSerializer):
@@ -163,4 +186,5 @@ class VideoDetailSerializer(VideoBaseSerializer):
         model = Video
         fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
-                  'rating', 'user_completed', 'user_video_status', 'quiz', 'comments')
+                  'rating', 'user_video_completed', 'user_video_status', 'user_quiz_passed',
+                  'quiz', 'comments')
