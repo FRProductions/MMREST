@@ -127,6 +127,9 @@ class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
+    user_completed = serializers.SerializerMethodField()
+    user_video_status = serializers.HyperlinkedIdentityField(view_name='videostatus-detail', read_only=True)
+
     """
     A method to provide the value for the 'user_completed' field.
     Looks up the VideoStatus record for the current user and video.
@@ -148,20 +151,17 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoSummarySerializer(VideoBaseSerializer):
-    user_completed = serializers.SerializerMethodField()
-
     class Meta:
         model = Video
-        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_completed')
+        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_completed', 'user_video_status')
 
 
 class VideoDetailSerializer(VideoBaseSerializer):
     quiz = QuizSerializer(source='quiz_set', many=True)
     comments = CommentSerializer(many=True)
-    user_completed = serializers.SerializerMethodField()
 
     class Meta:
         model = Video
         fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
-                  'rating', 'user_completed', 'quiz', 'comments')
+                  'rating', 'user_completed', 'user_video_status', 'quiz', 'comments')
