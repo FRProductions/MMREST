@@ -22,7 +22,7 @@ class Video(models.Model):
     def rating(self):
         objlst = VideoStatus.objects.filter(video=self)
         if objlst.count() == 0:
-            return 0.0
+            return None
         ratavg = objlst.aggregate(Avg('rating')).values()[0]
         ratavg = max(min(ratavg, 5.0), 0.0)  # clamp
         return ratavg
