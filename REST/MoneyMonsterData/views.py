@@ -51,7 +51,7 @@ class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
 # Video Status
 ###
 
-class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView, CreateModelMixin):
+class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the owner can view / edit
     serializer_class = VideoStatusSerializer
 
@@ -59,15 +59,12 @@ class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView, CreateModelMixin)
         # get related Video object (video id is in url)
         video = get_object_or_404(Video, pk=self.kwargs['pk'])
 
-        # get the VideoStatus object that matches the video and currently authenticated user (should be only one)
-        return get_object_or_404(VideoStatus, video=video, user=self.request.user)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-    def perform_create(self, serializer):
-        video = get_object_or_404(Video, pk=self.kwargs['pk'])
-        serializer.save(user=self.request.user, video=video)
+        # lookup the VideoStatus object that matches the video and user (should be only 1 if found)
+        queryset = VideoStatus.objects.filter(video=video, user=self.request.user)
+        if queryset.count() == 1:
+            return queryset[0]                                          # return existing VideoStatus object instance
+        else:
+            return VideoStatus(video=video, user=self.request.user)     # return new VideoStatus object instance
 
 
 ###
