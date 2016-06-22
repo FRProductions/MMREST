@@ -1,26 +1,41 @@
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
-
 from .models import *
 
 
 class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
-    quiz_score = serializers.ReadOnlyField(source="passed")
 
     class Meta:
         model = QuizResult
-        fields = ('quiz_score', )
+        fields = ('passed', )
+
+    # def get_passed(self, obj):
+    #
+    #     print ("pass function running")
+    #     count = 0
+    #     if obj.passed:
+    #         count = count + 1
+    #     return count
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     todo_count = serializers.IntegerField(source='todo_set.count', read_only=True)
-    discussion_count = serializers.IntegerField(source='comment_set.count', read_only=True)
-    quiz_results = QuizResultsSerializer(source='quizresult_set', many=True)
+    comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
+    passed_quiz_count = serializers.SerializerMethodField()
+    failed_quiz_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('todo_count', 'discussion_count', 'quiz_results', 'username')
+        fields = ('todo_count', 'comment_count', 'passed_quiz_count', 'failed_quiz_count', 'username')
+
+    def get_passed_quiz_count(self, obj):
+        return QuizResult.objects.filter(user=self.context['request'].user,
+                                         percent_correct__gte=QUIZ_PASS_PERCENTAGE).count()
+
+    def get_failed_quiz_count(self, obj):
+        return QuizResult.objects.filter(user=self.context['request'].user,
+                                         percent_correct__lt=QUIZ_PASS_PERCENTAGE).count()
 
 
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):

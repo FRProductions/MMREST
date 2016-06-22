@@ -9,6 +9,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
+# if the quiz percentage correct is greater than or equal to this number pass
+QUIZ_PASS_PERCENTAGE = 0.7
+
+
 # video data
 class Video(models.Model):
     title = models.CharField(max_length=255)
@@ -113,7 +117,7 @@ class QuizResult(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def passed(self):
-        return self.percent_correct >= 0.8
+        return self.percent_correct >= QUIZ_PASS_PERCENTAGE
 
     def __str__(self):
         return 'QuizResult(quiz:' + self.quiz.title + ', user:' + self.user.username +\

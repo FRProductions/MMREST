@@ -135,9 +135,8 @@ class CommentDetail(generics.RetrieveUpdateAPIView):
 #  Profile
 ###
 
-class ProfileList(generics.ListCreateAPIView):
+class ProfileList(generics.ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = User.objects.all()
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
@@ -145,14 +144,12 @@ class ProfileList(generics.ListCreateAPIView):
         This view should return a list of profile data
         for the currently authenticated user.
         """
-        user = self.request.user
-        return User.objects.filter(user_id=user)
+        return User.objects.filter(id=self.request.user.id)
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = ProfileSerializer
-
 
 ###
 # To Do
