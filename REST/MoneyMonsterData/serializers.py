@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from rest_framework import serializers
 
 from .models import *
@@ -65,10 +66,11 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='user.username')
     like_count = serializers.IntegerField(source='commentlike_set.count', read_only=True)
     content_type = serializers.CharField(source='content_type.model')
+    parent_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('url', 'content_type', 'object_id', 'text', 'date_added', 'owner', 'like_count')
+        fields = ('url', 'parent_url', 'content_type', 'object_id', 'text', 'date_added', 'owner', 'like_count')
 
     def validate_content_type(self, value):
         """
@@ -115,6 +117,17 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         """
         app_label = self.Meta.model._meta.app_label                         # label of this app
         return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
+
+    def get_parent_url(self, obj):
+        """
+        Create a parent url based on the parent object type
+        """
+        parent_object = obj.content_object
+        if isinstance(parent_object, Video):
+            absolute_path = reverse('video-detail', kwargs={'pk': parent_object.id})
+            return self.context['request'].build_absolute_uri(absolute_path)
+        else:
+            raise Exception('Unexpected type of comment parent object')
 
 
 class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
