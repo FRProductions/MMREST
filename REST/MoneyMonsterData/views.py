@@ -169,25 +169,3 @@ class TodoList(generics.ListCreateAPIView):
 class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
-
-
-###
-# Quiz Results
-###
-
-class QuizResultsList(generics.ListCreateAPIView):
-    queryset = QuizResult.objects.all()
-    serializer_class = QuizResultsSerializer
-
-    def get_queryset(self):
-        """
-        This view should return a list of profile data
-        for the currently authenticated user.
-        """
-        user = self.request.user
-        return QuizResult.objects.filter(user_id=user)
-
-
-class QuizResultsDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuizResult.objects.all()
-    serializer_class = QuizResultsSerializer

@@ -1,22 +1,8 @@
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
+
 from .models import *
-
-
-class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = QuizResult
-        fields = ('passed', )
-
-    # def get_passed(self, obj):
-    #
-    #     print ("pass function running")
-    #     count = 0
-    #     if obj.passed:
-    #         count = count + 1
-    #     return count
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -47,11 +33,10 @@ class ToDosSerializer(serializers.HyperlinkedModelSerializer):
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     to_do = ToDosSerializer(source='todo_set', many=True)
-    quiz_results = QuizResultsSerializer(source='quizresult_set', many=True)
 
     class Meta:
         model = User
-        fields = ('url', 'username', 'id', 'quiz_results', 'to_do')
+        fields = ('url', 'username', 'id', 'to_do')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):

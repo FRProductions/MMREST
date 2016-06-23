@@ -83,18 +83,6 @@ urlpatterns = format_suffix_patterns([
         name='quizquestions-detail'),
 
     ###
-    # Quiz results urls
-    ###
-
-    url(r'^video/(?P<pk>[0-9]+)/quiz/results/list',
-        views.QuizResultsList.as_view(),
-        name='quizresult-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/results/detail',
-        views.QuizResultsDetail.as_view(),
-        name='quizresult-detail'),
-
-
-    ###
     # Comment urls
     ###
 
