@@ -187,7 +187,7 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
 class VideoSummarySerializer(VideoBaseSerializer):
     class Meta:
         model = Video
-        fields = ('url', 'title', 'thumbnail_filename', 'rating', 'user_video_completed', 'user_video_status',
+        fields = ('url', 'id', 'title', 'thumbnail_filename', 'rating', 'user_video_completed', 'user_video_status',
                   'user_quiz_passed')
 
 
