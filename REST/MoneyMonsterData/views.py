@@ -2,12 +2,13 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.decorators import api_view
-from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .permissions import IsOwnerOrReadOnly
-from .serializers import *
+from .serializers import UserSerializer, VideoSummarySerializer, VideoDetailSerializer, VideoStatusSerializer,\
+                         QuizSerializer, QuizQuestionSerializer, CommentSerializer, ProfileSerializer, ToDosSerializer
+from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo
 
 
 @api_view(['GET'])
@@ -16,6 +17,7 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'videos': reverse('video-list', request=request, format=format),
         'comments': reverse('comment-list', request=request, format=format),
+        'api-version': '0.1.0',
     })
 
 ###
