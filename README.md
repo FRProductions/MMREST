@@ -39,6 +39,7 @@ Useful commands
     nginx
       ps -Al | grep nginx         # view running nginx processes
       sudo service nginx stop     # WARNING: have Fraboom SSL password handy for quickly restarting the server!
+                                  # NOTE: this password is called "fraboom ssl private key" in Dashlane
       sudo service nginx start
       sudo fuser -k 80/tcp        # kill stubborn nginx!
 
@@ -55,3 +56,17 @@ Useful commands
 
       view uwsgi upstart config:
           /etc/init/uwsgi.conf
+
+Update Database
+---------------
+
+    # get latest
+    sudo git fetch
+    sudo git checkout <commit-hash>
+
+    # apply any db migrations
+    sudo python manage.py migrate
+
+    # restart uwsgi
+    sudo service uwsgi stop
+    sudo service uwsgi start
