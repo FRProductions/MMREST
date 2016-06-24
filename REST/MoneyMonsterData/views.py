@@ -114,6 +114,14 @@ class CommentDetail(generics.RetrieveUpdateAPIView):
     serializer_class = CommentSerializer
 
 
+class CommentLatestList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.all().order_by('-date_added')[:20]
+
+
 ###
 # Comments Likes
 ###

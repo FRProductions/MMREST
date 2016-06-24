@@ -92,7 +92,9 @@ urlpatterns = format_suffix_patterns([
     url(r'^comment/(?P<pk>[0-9]+)/$',
         views.CommentDetail.as_view(),
         name='comment-detail'),
-
+    url(r'^comment/latest-list/$',
+        views.CommentLatestList.as_view(),
+        name='comment-latest-list'),
 
     ###
     # Comment Like urls
