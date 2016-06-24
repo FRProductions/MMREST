@@ -3,7 +3,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from rest_framework import serializers
 
-from .models import *
+from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo, CommentLike, ContentType, QuizResult
+from .models import QUIZ_PASS_PERCENTAGE
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
