@@ -17,7 +17,7 @@ def api_root(request, format=None):
         'users': reverse('user-list', request=request, format=format),
         'videos': reverse('video-list', request=request, format=format),
         'comments': reverse('comment-list', request=request, format=format),
-        'api-version': '0.1.0',
+        'api-version': '0.1.1',
     })
 
 ###
