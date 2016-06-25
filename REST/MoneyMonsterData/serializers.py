@@ -8,14 +8,17 @@ from .models import QUIZ_PASS_PERCENTAGE
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    todo_count = serializers.IntegerField(source='todo_set.count', read_only=True)
+    completed_todo_count = serializers.SerializerMethodField()
     comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
     passed_quiz_count = serializers.SerializerMethodField()
     failed_quiz_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('todo_count', 'comment_count', 'passed_quiz_count', 'failed_quiz_count', 'username')
+        fields = ('completed_todo_count', 'comment_count', 'passed_quiz_count', 'failed_quiz_count', 'username')
+
+    def get_completed_todo_count(self, user):
+        return ToDo.objects.filter(user=user, date_completed__isnull=False).count()
 
     def get_passed_quiz_count(self, user):
         return QuizResult.objects.filter(user=user, percent_correct__gte=QUIZ_PASS_PERCENTAGE).count()
