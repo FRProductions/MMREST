@@ -5,11 +5,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .permissions import IsOwnerOrReadOnly
+from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo
+from .permissions import IsOwnerOrReadOnly, IsOwner
 from .serializers import UserSerializer, VideoSummarySerializer, VideoDetailSerializer, VideoStatusSerializer,\
                          QuizSerializer, QuizQuestionSerializer, CommentSerializer, ProfileSerializer, ToDosSerializer
-from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo
 
+
+###
+# Root
+###
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -20,10 +24,10 @@ def api_root(request, format=None):
         'api-version': '0.1.1',
     })
 
+
 ###
 # User
 ###
-
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
@@ -54,7 +58,7 @@ class VideoDetail(generics.RetrieveAPIView):
 ###
 
 class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the owner is allowed
+    permission_classes = (permissions.IsAuthenticated, IsOwner,)
     serializer_class = VideoStatusSerializer
 
     def get_object(self):
@@ -111,7 +115,7 @@ class CommentList(generics.ListCreateAPIView):
 
 
 class CommentDetail(generics.RetrieveUpdateAPIView):
-    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the comment owner can edit
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -148,34 +152,35 @@ class ProfileList(generics.ListAPIView):
 
     def get_queryset(self):
         """
-        This view should return a list of profile data
-        for the currently authenticated user.
+        Return a list of profile data for the currently authenticated user.
         """
         return User.objects.filter(id=self.request.user.id)
 
-
-class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = ProfileSerializer
 
 ###
 # To Do
 ###
 
-
 class TodoList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
 
     def get_queryset(self):
         """
-        This view should return todo
-        for the currently authenticated user.
+        Return all ToDo objects for the current user
         """
-        user = self.request.user
-        return ToDo.objects.filter(user_id=user)
+        return ToDo.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        """
+        Always create new ToDos for the current user
+        """
+        serializer.save(user=self.request.user)
 
 
 class TodoDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated, IsOwner,)
     queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
+

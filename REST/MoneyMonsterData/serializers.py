@@ -1,10 +1,12 @@
+from django.utils import timezone
+
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from rest_framework import serializers
 
-from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo, CommentLike, ContentType, QuizResult
 from .models import QUIZ_PASS_PERCENTAGE
+from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo, CommentLike, ContentType, QuizResult
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,7 +20,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('completed_todo_count', 'comment_count', 'passed_quiz_count', 'failed_quiz_count', 'username')
 
     def get_completed_todo_count(self, user):
-        return ToDo.objects.filter(user=user, date_completed__isnull=False).count()
+        return ToDo.objects.filter(user=user, completed=True).count()
 
     def get_passed_quiz_count(self, user):
         return QuizResult.objects.filter(user=user, percent_correct__gte=QUIZ_PASS_PERCENTAGE).count()
@@ -28,10 +30,21 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):
+    date_completed = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = ToDo
-        fields = ('url', 'user', 'icon', 'text', 'date_added', 'date_completed')
+        fields = ('url', 'icon', 'text', 'date_added', 'completed', 'date_completed')
+
+    def create(self, validated_data):
+        if validated_data['completed']:
+            validated_data['date_completed'] = timezone.now()
+        return super(ToDosSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if validated_data['completed']:
+            validated_data['date_completed'] = timezone.now()
+        return super(ToDosSerializer, self).update(instance, validated_data)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

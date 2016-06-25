@@ -83,6 +83,7 @@ class ToDo(models.Model):
     icon = models.CharField(max_length=255)
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
+    completed = models.BooleanField(default=False)
     date_completed = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

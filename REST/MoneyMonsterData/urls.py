@@ -26,9 +26,6 @@ urlpatterns = format_suffix_patterns([
     url(r'^user/profile/$',
         views.ProfileList.as_view(),
         name='profile-list'),
-    url(r'^user/profile/(?P<pk>[0-9]+)/$',
-        views.ProfileDetail.as_view(),
-        name='profile-detail'),
 
     ###
     # ToDos urls
