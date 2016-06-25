@@ -25,12 +25,12 @@ def api_root(request, format=None):
 ###
 
 
-class UserList(generics.ListCreateAPIView):
+class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -39,12 +39,12 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 # Videos
 ###
 
-class VideoList(generics.ListCreateAPIView):
+class VideoList(generics.ListAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSummarySerializer
 
 
-class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
+class VideoDetail(generics.RetrieveAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoDetailSerializer
 
@@ -54,7 +54,7 @@ class VideoDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the owner can view / edit
+    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # only the owner is allowed
     serializer_class = VideoStatusSerializer
 
     def get_object(self):
@@ -102,7 +102,7 @@ class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
 ###
 
 class CommentList(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticated, IsOwnerOrReadOnly,)  # authenticated users can view all comments
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
