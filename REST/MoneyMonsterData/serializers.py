@@ -212,7 +212,7 @@ class VideoDetailSerializer(VideoBaseSerializer):
 
     class Meta:
         model = Video
-        fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
+        fields = ('url', 'id', 'title', 'description', 'thumbnail_filename', 'todo_text', 'todo_icon',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
                   'rating', 'user_video_completed', 'user_video_status', 'user_quiz_passed',
                   'quiz', 'comments')
