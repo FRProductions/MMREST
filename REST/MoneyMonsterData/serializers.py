@@ -17,13 +17,11 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('todo_count', 'comment_count', 'passed_quiz_count', 'failed_quiz_count', 'username')
 
-    def get_passed_quiz_count(self, obj):
-        return QuizResult.objects.filter(user=self.context['request'].user,
-                                         percent_correct__gte=QUIZ_PASS_PERCENTAGE).count()
+    def get_passed_quiz_count(self, user):
+        return QuizResult.objects.filter(user=user, percent_correct__gte=QUIZ_PASS_PERCENTAGE).count()
 
-    def get_failed_quiz_count(self, obj):
-        return QuizResult.objects.filter(user=self.context['request'].user,
-                                         percent_correct__lt=QUIZ_PASS_PERCENTAGE).count()
+    def get_failed_quiz_count(self, user):
+        return QuizResult.objects.filter(user=user, percent_correct__lt=QUIZ_PASS_PERCENTAGE).count()
 
 
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):
@@ -119,11 +117,11 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         app_label = self.Meta.model._meta.app_label                         # label of this app
         return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
 
-    def get_parent_url(self, obj):
+    def get_parent_url(self, comment):
         """
         Create a parent url based on the parent object type
         """
-        parent_object = obj.content_object
+        parent_object = comment.content_object
         if isinstance(parent_object, Video):
             absolute_path = reverse('video-detail', kwargs={'pk': parent_object.id})
             return self.context['request'].build_absolute_uri(absolute_path)
@@ -147,13 +145,12 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
     """
     Looks up the VideoStatus record for the current user and video and returns the 'completed' boolean.
     """
-    def get_user_video_completed(self, obj):
+    def get_user_video_completed(self, video):
 
-        # get current user and video
+        # get current user
         user = self.context['request'].user
         if not user.is_authenticated():
             return "not authenticated"
-        video = obj
 
         # lookup VideoStatus instance, if it exists
         try:
@@ -165,7 +162,8 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
     """
     Looks up the QuizResult record for the current user and video/quiz and returns the 'passed' boolean.
     """
-    def get_user_quiz_passed(self, obj):
+    def get_user_quiz_passed(self, video):
+
         # get current user
         user = self.context['request'].user
         if not user.is_authenticated():
@@ -173,7 +171,7 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
 
         # get quiz related to video
         try:
-            quiz = Quiz.objects.get(video=obj)
+            quiz = Quiz.objects.get(video=video)
         except Quiz.DoesNotExist:
             return None
 
