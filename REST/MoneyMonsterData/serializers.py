@@ -48,11 +48,9 @@ class ToDosSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    to_do = ToDosSerializer(source='todo_set', many=True)
-
     class Meta:
         model = User
-        fields = ('url', 'username', 'id', 'to_do')
+        fields = ('url', 'username')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
