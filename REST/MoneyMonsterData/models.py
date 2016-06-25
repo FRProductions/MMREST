@@ -17,6 +17,7 @@ QUIZ_PASS_PERCENTAGE = 0.7
 class Video(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
+    sort_order = models.IntegerField(default=0)
     thumbnail_filename = models.CharField(max_length=255)
     hls_url = models.CharField(max_length=255)
     rtmp_server_url = models.CharField(max_length=255)

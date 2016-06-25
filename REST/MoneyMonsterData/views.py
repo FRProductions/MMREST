@@ -40,7 +40,7 @@ class UserDetail(generics.RetrieveAPIView):
 ###
 
 class VideoList(generics.ListAPIView):
-    queryset = Video.objects.all()
+    queryset = Video.objects.all().order_by('sort_order', 'id')  # order first by 'sort_order', then by 'id'
     serializer_class = VideoSummarySerializer
 
 
