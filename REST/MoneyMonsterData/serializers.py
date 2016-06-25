@@ -192,7 +192,7 @@ class VideoSummarySerializer(VideoBaseSerializer):
 
 class VideoDetailSerializer(VideoBaseSerializer):
     quiz = QuizSerializer(source='quiz_set', many=True)
-    comments = CommentSerializer(many=True)
+    comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Video
@@ -200,3 +200,9 @@ class VideoDetailSerializer(VideoBaseSerializer):
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
                   'rating', 'user_video_completed', 'user_video_status', 'user_quiz_passed',
                   'quiz', 'comments')
+
+    def get_comments(self, video):
+        queryset = video.comments.all().order_by('-date_added')[:20]  # order newest to oldest, and take first chunk
+        queryset = reversed(queryset)                                 # reverse selected chunk so it's oldest to newest
+        serializer = CommentSerializer(instance=queryset, many=True, context={'request': self.context['request']})
+        return serializer.data
