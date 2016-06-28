@@ -72,7 +72,7 @@ class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = CommentLike
-        fields = ('user', 'comment')
+        fields = ('url', 'comment')
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):

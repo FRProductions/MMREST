@@ -1,14 +1,17 @@
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo
+from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, CommentLike, ToDo
 from .permissions import IsOwnerOrReadOnly, IsOwner
 from .serializers import UserSerializer, VideoSummarySerializer, VideoDetailSerializer, VideoStatusSerializer,\
-                         QuizSerializer, QuizQuestionSerializer, CommentSerializer, ProfileSerializer, ToDosSerializer
+                         QuizSerializer, QuizQuestionSerializer, CommentSerializer, CommentLikeSerializer,\
+                         ProfileSerializer, ToDosSerializer
 
 
 ###
@@ -132,14 +135,24 @@ class CommentLatestList(generics.ListAPIView):
 # Comments Likes
 ###
 
-# class CommentLikeList(generics.ListCreateAPIView):
-#     queryset = CommentLike.objects.all()
-#     serializer_class = CommentSerializer
-#
-#
-# class CommentLikeDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = CommentLike.objects.all()
-#     serializer_class = CommentSerializer
+class CommentLikeList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CommentLikeSerializer
+
+    def get_queryset(self):
+        return CommentLike.objects.filter(user=self.request.user)  # filter for the current user
+
+    def perform_create(self, serializer):
+        try:
+            serializer.save(user=self.request.user)  # save only for the current user
+        except IntegrityError:
+            raise ValidationError('current user has already liked this comment')
+
+
+class CommentLikeDetail(generics.RetrieveDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated, IsOwner,)
+    queryset = CommentLike.objects.all()
+    serializer_class = CommentLikeSerializer
 
 
 ###
@@ -151,10 +164,7 @@ class ProfileList(generics.ListAPIView):
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
-        """
-        Return a list of profile data for the currently authenticated user.
-        """
-        return User.objects.filter(id=self.request.user.id)
+        return User.objects.filter(id=self.request.user.id)  # filter for the current user
 
 
 ###
@@ -163,20 +173,13 @@ class ProfileList(generics.ListAPIView):
 
 class TodoList(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
-    queryset = ToDo.objects.all()
     serializer_class = ToDosSerializer
 
     def get_queryset(self):
-        """
-        Return all ToDo objects for the current user
-        """
-        return ToDo.objects.filter(user=self.request.user)
+        return ToDo.objects.filter(user=self.request.user)  # filter for the current user
 
     def perform_create(self, serializer):
-        """
-        Always create new ToDos for the current user
-        """
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)  # save only for the current user
 
 
 class TodoDetail(generics.RetrieveUpdateDestroyAPIView):

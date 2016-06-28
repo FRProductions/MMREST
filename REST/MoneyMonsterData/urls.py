@@ -97,12 +97,12 @@ urlpatterns = format_suffix_patterns([
     # Comment Like urls
     ###
 
-    # url(r'^comment/like/$',
-    #     views.CommentLikeList.as_view(),
-    #     name='commentlike-list'),
-    # url(r'^comment/like/(?P<pk>[0-9]+)/$',
-    #     views.CommentLikeDetail.as_view(),
-    #     name='commentlike-detail'),
+    url(r'^comment/like/$',
+        views.CommentLikeList.as_view(),
+        name='commentlike-list'),
+    url(r'^comment/like/(?P<pk>[0-9]+)/$',
+        views.CommentLikeDetail.as_view(),
+        name='commentlike-detail'),
 
 ])
 
