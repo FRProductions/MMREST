@@ -80,12 +80,12 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     content_type = serializers.CharField(source='content_type.model')
     owner = serializers.ReadOnlyField(source='user.username')
     like_count = serializers.IntegerField(source='commentlike_set.count', read_only=True)
-    user_liked = serializers.SerializerMethodField(read_only=True)
+    user_like_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Comment
         fields = ('url', 'parent_url', 'content_type', 'object_id', 'text', 'date_added', 'owner', 'like_count',
-                  'user_liked')
+                  'user_like_url')
 
     def validate_content_type(self, value):
         """
@@ -133,15 +133,16 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         app_label = self.Meta.model._meta.app_label                         # label of this app
         return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
 
-    def get_user_liked(self, comment):
+    def get_user_like_url(self, comment):
         """
-        Returns True if the current user has already liked this comment; False otherwise
+        Return comment like detail URL if the current user has liked this comment; None otherwise
         """
         try:
-            CommentLike.objects.get(user=self.context['request'].user, comment=comment)
-            return True
+            comment_like = CommentLike.objects.get(user=self.context['request'].user, comment=comment)
+            absolute_path = reverse('commentlike-detail', kwargs={'pk': comment_like.id})
+            return self.context['request'].build_absolute_uri(absolute_path)
         except CommentLike.DoesNotExist:
-            return False
+            return None
 
     def get_parent_url(self, comment):
         """
