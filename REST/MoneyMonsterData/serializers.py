@@ -76,14 +76,16 @@ class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    parent_url = serializers.SerializerMethodField(read_only=True)
+    content_type = serializers.CharField(source='content_type.model')
     owner = serializers.ReadOnlyField(source='user.username')
     like_count = serializers.IntegerField(source='commentlike_set.count', read_only=True)
-    content_type = serializers.CharField(source='content_type.model')
-    parent_url = serializers.SerializerMethodField(read_only=True)
+    user_liked = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('url', 'parent_url', 'content_type', 'object_id', 'text', 'date_added', 'owner', 'like_count')
+        fields = ('url', 'parent_url', 'content_type', 'object_id', 'text', 'date_added', 'owner', 'like_count',
+                  'user_liked')
 
     def validate_content_type(self, value):
         """
@@ -130,6 +132,16 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         """
         app_label = self.Meta.model._meta.app_label                         # label of this app
         return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
+
+    def get_user_liked(self, comment):
+        """
+        Returns True if the current user has already liked this comment; False otherwise
+        """
+        try:
+            CommentLike.objects.get(user=self.context['request'].user, comment=comment)
+            return True
+        except CommentLike.DoesNotExist:
+            return False
 
     def get_parent_url(self, comment):
         """
