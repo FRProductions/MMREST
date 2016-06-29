@@ -28,7 +28,7 @@ class Video(models.Model):
     quiz = models.ForeignKey('Quiz', default=None, null=True, blank=True)
 
     def rating(self):
-        objlst = VideoStatus.objects.filter(video=self)
+        objlst = VideoStatus.objects.filter(video=self, rating__isnull=False)
         if objlst.count() == 0:
             return None
         ratavg = objlst.aggregate(Avg('rating')).values()[0]
