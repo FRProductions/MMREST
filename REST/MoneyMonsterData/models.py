@@ -9,7 +9,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-# if the quiz percentage correct is greater than or equal to this number pass
+# a quiz was "passed" if this percentage of quiz questions was answered correctly
 QUIZ_PASS_PERCENTAGE = 0.7
 
 
@@ -25,6 +25,7 @@ class Video(models.Model):
     rtmp_server_url = models.CharField(max_length=255)
     rtmp_stream_name = models.CharField(max_length=255)
     comments = GenericRelation('Comment')
+    quiz = models.ForeignKey('Quiz', default=None, null=True, blank=True)
 
     def rating(self):
         objlst = VideoStatus.objects.filter(video=self)
@@ -92,25 +93,23 @@ class ToDo(models.Model):
         return 'ToDo(user:' + self.user.username + ')'
 
 
-# a quiz, which is always related to a video
+# a quiz
 class Quiz(models.Model):
-    video = models.ForeignKey(Video)
     title = models.CharField(max_length=255)
 
     def __str__(self):
-        return 'Quiz(video:' + self.video.title + ', title:' + self.title + ')'
+        return 'Quiz(title:' + self.title + ')'
 
 
-# a quiz question, part of a quiz
+# a true/false quiz question, part of a quiz
 class QuizQuestion(models.Model):
     quiz = models.ForeignKey(Quiz)
-    question_text = models.TextField(blank=False, max_length=1000)
-    answer = models.BooleanField(default=False)
-    correct_message = models.TextField(blank=False, max_length=1000)
-    false_message = models.TextField(blank=False, max_length=1000)
+    statement = models.TextField(blank=False, max_length=1000)
+    statement_is_true = models.BooleanField(default=False)
+    statement_message = models.TextField(blank=True, max_length=1000)
 
     def __str__(self):
-        return 'QuizQuestion(quiz:' + self.quiz.title + ', text:' + self.question_text + ')'
+        return 'QuizQuestion(quiz:' + self.quiz.title + ', statement:' + self.statement + ')'
 
 
 # a user's quiz result
@@ -119,6 +118,9 @@ class QuizResult(models.Model):
     user = models.ForeignKey(User)
     percent_correct = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("quiz", "user")
 
     def passed(self):
         return self.percent_correct >= QUIZ_PASS_PERCENTAGE

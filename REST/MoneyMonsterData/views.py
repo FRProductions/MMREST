@@ -21,10 +21,10 @@ from .serializers import UserSerializer, VideoSummarySerializer, VideoDetailSeri
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'videos': reverse('video-list', request=request, format=format),
-        'comments': reverse('comment-list', request=request, format=format),
         'api-version': '0.1.1',
+        'quizzes': reverse('quiz-list', request=request, format=format),
+        'comments': reverse('comment-list', request=request, format=format),
+        'videos': reverse('video-list', request=request, format=format),
     })
 
 
@@ -47,11 +47,13 @@ class UserDetail(generics.RetrieveAPIView):
 ###
 
 class VideoList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Video.objects.all().order_by('sort_order', 'id')  # order first by 'sort_order', then by 'id'
     serializer_class = VideoSummarySerializer
 
 
 class VideoDetail(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Video.objects.all()
     serializer_class = VideoDetailSerializer
 
@@ -80,28 +82,16 @@ class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView):
 # Quiz
 ###
 
-class QuizList(generics.ListCreateAPIView):
+class QuizList(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
 
 
-class QuizDetail(generics.RetrieveUpdateDestroyAPIView):
+class QuizDetail(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
-
-
-###
-# Quiz Questions
-###
-
-class QuizQuestionsList(generics.ListCreateAPIView):
-    queryset = QuizQuestion.objects.all()
-    serializer_class = QuizQuestionSerializer
-
-
-class QuizQuestionsDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuizQuestion.objects.all()
-    serializer_class = QuizQuestionSerializer
 
 
 ###

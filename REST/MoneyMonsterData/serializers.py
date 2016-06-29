@@ -56,8 +56,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = QuizQuestion
-        fields = ('question_text', 'answer',
-                  'correct_message', 'false_message')
+        fields = ('statement', 'statement_is_true', 'statement_message')
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
@@ -218,7 +217,6 @@ class VideoSummarySerializer(VideoBaseSerializer):
 
 
 class VideoDetailSerializer(VideoBaseSerializer):
-    quiz = QuizSerializer(source='quiz_set', many=True)
     comments = serializers.SerializerMethodField()
 
     class Meta:

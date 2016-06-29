@@ -11,12 +11,12 @@ urlpatterns = format_suffix_patterns([
     # User urls
     ###
 
-    url(r'^user/$',
-        views.UserList.as_view(),
-        name='user-list'),
-    url(r'^user/(?P<pk>[0-9]+)/$',
-        views.UserDetail.as_view(),
-        name='user-detail'),
+    # url(r'^user/$',
+    #     views.UserList.as_view(),
+    #     name='user-list'),
+    # url(r'^user/(?P<pk>[0-9]+)/$',
+    #     views.UserDetail.as_view(),
+    #     name='user-detail'),
 
 
     ###
@@ -61,23 +61,12 @@ urlpatterns = format_suffix_patterns([
     # Quiz urls
     ###
 
-    url(r'^video/(?P<pk>[0-9]+)/quiz/list/$',
+    url(r'^quiz/$',
         views.QuizList.as_view(),
         name='quiz-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/$',
+    url(r'^quiz/(?P<pk>[0-9]+)/$',
         views.QuizDetail.as_view(),
         name='quiz-detail'),
-
-    ###
-    # Questions urls
-    ###
-
-    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/list',
-        views.QuizQuestionsList.as_view(),
-        name='quizquestions-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/detail',
-        views.QuizQuestionsDetail.as_view(),
-        name='quizquestions-detail'),
 
     ###
     # Comment urls
