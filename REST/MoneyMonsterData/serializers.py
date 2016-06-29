@@ -61,10 +61,19 @@ class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
     questions = QuizQuestionSerializer(source='quizquestion_set', many=True)
+    user_quiz_result = serializers.HyperlinkedIdentityField(view_name='quizresult-detail', read_only=True)
 
     class Meta:
         model = Quiz
-        fields = ('url', 'title', 'questions')
+        fields = ('url', 'title', 'user_quiz_result', 'questions')
+
+
+class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = QuizResult
+        fields = ('user', 'percent_correct', )
 
 
 class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):

@@ -7,10 +7,10 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, CommentLike, ToDo
+from .models import User, Video, VideoStatus, Quiz, QuizResult, Comment, CommentLike, ToDo
 from .permissions import IsOwnerOrReadOnly, IsOwner
 from .serializers import UserSerializer, VideoSummarySerializer, VideoDetailSerializer, VideoStatusSerializer,\
-                         QuizSerializer, QuizQuestionSerializer, CommentSerializer, CommentLikeSerializer,\
+                         QuizSerializer, QuizResultsSerializer, CommentSerializer, CommentLikeSerializer,\
                          ProfileSerializer, ToDosSerializer
 
 
@@ -73,9 +73,9 @@ class VideoStatusDetail(generics.RetrieveUpdateDestroyAPIView):
         # lookup the VideoStatus object that matches the video and user (should be only 1 if found)
         queryset = VideoStatus.objects.filter(video=video, user=self.request.user)
         if queryset.count() == 1:
-            return queryset[0]                                          # return existing VideoStatus object instance
+            return queryset[0]                                          # return existing object instance
         else:
-            return VideoStatus(video=video, user=self.request.user)     # return new VideoStatus object instance
+            return VideoStatus(video=video, user=self.request.user)     # return new object instance
 
 
 ###
@@ -92,6 +92,26 @@ class QuizDetail(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
+
+
+###
+# Quiz Results
+###
+
+class QuizResultsDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated, IsOwner,)
+    serializer_class = QuizResultsSerializer
+
+    def get_object(self):
+        # get related Quiz object (quiz id is in url)
+        quiz = get_object_or_404(Quiz, pk=self.kwargs['pk'])
+
+        # lookup the QuizResult object that matches the quiz and user (should be only 1 if found)
+        queryset = QuizResult.objects.filter(quiz=quiz, user=self.request.user)
+        if queryset.count() == 1:
+            return queryset[0]  # return existing object instance
+        else:
+            return QuizResult(quiz=quiz, user=self.request.user)  # return new object instance
 
 
 ###
