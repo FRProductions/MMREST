@@ -87,7 +87,7 @@ class ToDo(models.Model):
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
     completed = models.BooleanField(default=False)
-    date_completed = models.DateTimeField(null=True, blank=True)
+    date_completed = models.DateTimeField(default=None, null=True, blank=True)
 
     def __str__(self):
         return 'ToDo(user:' + self.user.username + ')'
