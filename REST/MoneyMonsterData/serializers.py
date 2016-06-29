@@ -156,7 +156,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True, required=False)
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = VideoStatus
