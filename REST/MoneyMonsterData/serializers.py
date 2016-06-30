@@ -73,7 +73,7 @@ class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = QuizResult
-        fields = ('user', 'percent_correct', )
+        fields = ('user', 'percent_correct', 'passed')
 
 
 class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
