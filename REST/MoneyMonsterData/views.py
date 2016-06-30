@@ -188,7 +188,8 @@ class TodoList(generics.ListCreateAPIView):
     serializer_class = ToDosSerializer
 
     def get_queryset(self):
-        return ToDo.objects.filter(user=self.request.user)  # filter for the current user
+        # filter for the current user and non-completed items
+        return ToDo.objects.filter(user=self.request.user, completed=False)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)  # save only for the current user
