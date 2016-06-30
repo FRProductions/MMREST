@@ -196,6 +196,7 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
 
     """
     Looks up the QuizResult record for the current user and video/quiz and returns the 'passed' boolean.
+    If there is no QuizResult, returns None.
     """
     def get_user_quiz_passed(self, video):
 
@@ -204,15 +205,13 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
         if not user.is_authenticated():
             return "not authenticated"
 
-        # get quiz related to video
-        try:
-            quiz = Quiz.objects.get(video=video)
-        except Quiz.DoesNotExist:
+        # If there is no quiz for this video, there can be no quiz result!
+        if video.quiz is None:
             return None
 
         # lookup QuizResult instance, if it exists
         try:
-            quiz_result = QuizResult.objects.get(user=user, quiz=quiz)
+            quiz_result = QuizResult.objects.get(user=user, quiz=video.quiz)
             return quiz_result.passed()
         except QuizResult.DoesNotExist:
             return None
