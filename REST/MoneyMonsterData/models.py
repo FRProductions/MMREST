@@ -134,5 +134,4 @@ class QuizResult(models.Model):
 @receiver(post_save, sender=User)
 def create_profile_data(sender, **kwargs):
     if kwargs.get('created', False):
-        ToDo.objects.create(user=kwargs.get('instance'), icon="todo-icon-share",
-                            text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))
+        ToDo.objects.create(user=kwargs.get('instance'), icon="todo-icon-share", text="Share Money Monster 101!")
