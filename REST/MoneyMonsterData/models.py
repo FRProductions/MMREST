@@ -9,22 +9,26 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-# if the quiz percentage correct is greater than or equal to this number pass
+# a quiz was "passed" if this percentage of quiz questions was answered correctly
 QUIZ_PASS_PERCENTAGE = 0.7
 
 
 # video data
 class Video(models.Model):
+    sort_order = models.IntegerField(default=0)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     thumbnail_filename = models.CharField(max_length=255)
+    todo_text = models.CharField(max_length=255)
+    todo_icon = models.CharField(max_length=255)
     hls_url = models.CharField(max_length=255)
     rtmp_server_url = models.CharField(max_length=255)
     rtmp_stream_name = models.CharField(max_length=255)
     comments = GenericRelation('Comment')
+    quiz = models.ForeignKey('Quiz', default=None, null=True, blank=True)
 
     def rating(self):
-        objlst = VideoStatus.objects.filter(video=self)
+        objlst = VideoStatus.objects.filter(video=self, rating__isnull=False)
         if objlst.count() == 0:
             return None
         ratavg = objlst.aggregate(Avg('rating')).values()[0]
@@ -82,31 +86,30 @@ class ToDo(models.Model):
     icon = models.CharField(max_length=255)
     text = models.TextField(blank=False, max_length=1000)
     date_added = models.DateTimeField(auto_now_add=True)
-    date_completed = models.DateTimeField(auto_now_add=True)
+    completed = models.BooleanField(default=False)
+    date_completed = models.DateTimeField(default=None, null=True, blank=True)
 
     def __str__(self):
         return 'ToDo(user:' + self.user.username + ')'
 
 
-# a quiz, which is always related to a video
+# a quiz
 class Quiz(models.Model):
-    video = models.ForeignKey(Video)
     title = models.CharField(max_length=255)
 
     def __str__(self):
-        return 'Quiz(video:' + self.video.title + ', title:' + self.title + ')'
+        return 'Quiz(title:' + self.title + ')'
 
 
-# a quiz question, part of a quiz
+# a true/false quiz question, part of a quiz
 class QuizQuestion(models.Model):
     quiz = models.ForeignKey(Quiz)
-    question_text = models.TextField(blank=False, max_length=1000)
-    answer = models.BooleanField(default=False)
-    correct_message = models.TextField(blank=False, max_length=1000)
-    false_message = models.TextField(blank=False, max_length=1000)
+    statement = models.TextField(blank=False, max_length=1000)
+    statement_is_true = models.BooleanField(default=False)
+    statement_message = models.TextField(blank=True, max_length=1000)
 
     def __str__(self):
-        return 'QuizQuestion(quiz:' + self.quiz.title + ', text:' + self.question_text + ')'
+        return 'QuizQuestion(quiz:' + self.quiz.title + ', statement:' + self.statement + ')'
 
 
 # a user's quiz result
@@ -115,6 +118,9 @@ class QuizResult(models.Model):
     user = models.ForeignKey(User)
     percent_correct = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(1.0)])
     date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("quiz", "user")
 
     def passed(self):
         return self.percent_correct >= QUIZ_PASS_PERCENTAGE
@@ -128,5 +134,4 @@ class QuizResult(models.Model):
 @receiver(post_save, sender=User)
 def create_profile_data(sender, **kwargs):
     if kwargs.get('created', False):
-        ToDo.objects.create(user=kwargs.get('instance'), icon="mm-Button-trash-icon",
-                            text="Share Money Monster 101!", date_added=models.DateTimeField(auto_now_add=True))
+        ToDo.objects.create(user=kwargs.get('instance'), icon="todo-icon-share", text="Share Money Monster 101!")

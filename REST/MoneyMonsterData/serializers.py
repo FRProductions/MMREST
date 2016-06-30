@@ -1,77 +1,99 @@
+from django.utils import timezone
+
 from django.apps import apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from rest_framework import serializers
 
-from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo, CommentLike, ContentType, QuizResult
 from .models import QUIZ_PASS_PERCENTAGE
+from .models import User, Video, VideoStatus, Quiz, QuizQuestion, Comment, ToDo, CommentLike, ContentType, QuizResult
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
-    todo_count = serializers.IntegerField(source='todo_set.count', read_only=True)
+    completed_todo_count = serializers.SerializerMethodField()
     comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
     passed_quiz_count = serializers.SerializerMethodField()
     failed_quiz_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('todo_count', 'comment_count', 'passed_quiz_count', 'failed_quiz_count', 'username')
+        fields = ('completed_todo_count', 'comment_count', 'passed_quiz_count', 'failed_quiz_count', 'username')
 
-    def get_passed_quiz_count(self, obj):
-        return QuizResult.objects.filter(user=self.context['request'].user,
-                                         percent_correct__gte=QUIZ_PASS_PERCENTAGE).count()
+    def get_completed_todo_count(self, user):
+        return ToDo.objects.filter(user=user, completed=True).count()
 
-    def get_failed_quiz_count(self, obj):
-        return QuizResult.objects.filter(user=self.context['request'].user,
-                                         percent_correct__lt=QUIZ_PASS_PERCENTAGE).count()
+    def get_passed_quiz_count(self, user):
+        return QuizResult.objects.filter(user=user, percent_correct__gte=QUIZ_PASS_PERCENTAGE).count()
+
+    def get_failed_quiz_count(self, user):
+        return QuizResult.objects.filter(user=user, percent_correct__lt=QUIZ_PASS_PERCENTAGE).count()
 
 
 class ToDosSerializer(serializers.HyperlinkedModelSerializer):
+    date_completed = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = ToDo
-        fields = ('url', 'user', 'icon', 'text', 'date_added', 'date_completed')
+        fields = ('url', 'icon', 'text', 'date_added', 'completed', 'date_completed')
+
+    def create(self, validated_data):
+        if validated_data['completed']:
+            validated_data['date_completed'] = timezone.now()
+        return super(ToDosSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if validated_data['completed']:
+            validated_data['date_completed'] = timezone.now()
+        return super(ToDosSerializer, self).update(instance, validated_data)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    to_do = ToDosSerializer(source='todo_set', many=True)
-
     class Meta:
         model = User
-        fields = ('url', 'username', 'id', 'to_do')
+        fields = ('url', 'username')
 
 
 class QuizQuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = QuizQuestion
-        fields = ('question_text', 'answer',
-                  'correct_message', 'false_message')
+        fields = ('statement', 'statement_is_true', 'statement_message')
 
 
 class QuizSerializer(serializers.HyperlinkedModelSerializer):
     questions = QuizQuestionSerializer(source='quizquestion_set', many=True)
+    user_quiz_result = serializers.HyperlinkedIdentityField(view_name='quizresult-detail', read_only=True)
 
     class Meta:
         model = Quiz
-        fields = ('url', 'title', 'questions')
+        fields = ('url', 'title', 'user_quiz_result', 'questions')
+
+
+class QuizResultsSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+
+    class Meta:
+        model = QuizResult
+        fields = ('user', 'percent_correct', 'passed')
 
 
 class CommentLikeSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = CommentLike
-        fields = ('user', 'comment')
+        fields = ('url', 'comment')
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    parent_url = serializers.SerializerMethodField(read_only=True)
+    content_type = serializers.CharField(source='content_type.model')
     owner = serializers.ReadOnlyField(source='user.username')
     like_count = serializers.IntegerField(source='commentlike_set.count', read_only=True)
-    content_type = serializers.CharField(source='content_type.model')
-    parent_url = serializers.SerializerMethodField(read_only=True)
+    user_like_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('url', 'parent_url', 'content_type', 'object_id', 'text', 'date_added', 'owner', 'like_count')
+        fields = ('url', 'parent_url', 'content_type', 'object_id', 'text', 'date_added', 'owner', 'like_count',
+                  'user_like_url')
 
     def validate_content_type(self, value):
         """
@@ -119,11 +141,22 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         app_label = self.Meta.model._meta.app_label                         # label of this app
         return apps.get_model(app_label=app_label, model_name=model_name)   # Raises LookupError if model not found
 
-    def get_parent_url(self, obj):
+    def get_user_like_url(self, comment):
+        """
+        Return comment like detail URL if the current user has liked this comment; None otherwise
+        """
+        try:
+            comment_like = CommentLike.objects.get(user=self.context['request'].user, comment=comment)
+            absolute_path = reverse('commentlike-detail', kwargs={'pk': comment_like.id})
+            return self.context['request'].build_absolute_uri(absolute_path)
+        except CommentLike.DoesNotExist:
+            return None
+
+    def get_parent_url(self, comment):
         """
         Create a parent url based on the parent object type
         """
-        parent_object = obj.content_object
+        parent_object = comment.content_object
         if isinstance(parent_object, Video):
             absolute_path = reverse('video-detail', kwargs={'pk': parent_object.id})
             return self.context['request'].build_absolute_uri(absolute_path)
@@ -132,7 +165,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoStatusSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True, required=False)
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = VideoStatus
@@ -147,13 +180,12 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
     """
     Looks up the VideoStatus record for the current user and video and returns the 'completed' boolean.
     """
-    def get_user_video_completed(self, obj):
+    def get_user_video_completed(self, video):
 
-        # get current user and video
+        # get current user
         user = self.context['request'].user
         if not user.is_authenticated():
             return "not authenticated"
-        video = obj
 
         # lookup VideoStatus instance, if it exists
         try:
@@ -164,22 +196,22 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
 
     """
     Looks up the QuizResult record for the current user and video/quiz and returns the 'passed' boolean.
+    If there is no QuizResult, returns None.
     """
-    def get_user_quiz_passed(self, obj):
+    def get_user_quiz_passed(self, video):
+
         # get current user
         user = self.context['request'].user
         if not user.is_authenticated():
             return "not authenticated"
 
-        # get quiz related to video
-        try:
-            quiz = Quiz.objects.get(video=obj)
-        except Quiz.DoesNotExist:
+        # If there is no quiz for this video, there can be no quiz result!
+        if video.quiz is None:
             return None
 
         # lookup QuizResult instance, if it exists
         try:
-            quiz_result = QuizResult.objects.get(user=user, quiz=quiz)
+            quiz_result = QuizResult.objects.get(user=user, quiz=video.quiz)
             return quiz_result.passed()
         except QuizResult.DoesNotExist:
             return None
@@ -193,12 +225,17 @@ class VideoSummarySerializer(VideoBaseSerializer):
 
 
 class VideoDetailSerializer(VideoBaseSerializer):
-    quiz = QuizSerializer(source='quiz_set', many=True)
-    comments = CommentSerializer(many=True)
+    comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Video
-        fields = ('url', 'id', 'title', 'description', 'thumbnail_filename',
+        fields = ('url', 'id', 'title', 'description', 'thumbnail_filename', 'todo_text', 'todo_icon',
                   'hls_url', 'rtmp_server_url', 'rtmp_stream_name',
                   'rating', 'user_video_completed', 'user_video_status', 'user_quiz_passed',
                   'quiz', 'comments')
+
+    def get_comments(self, video):
+        queryset = video.comments.all().order_by('-date_added')[:20]  # order newest to oldest, and take first chunk
+        queryset = reversed(queryset)                                 # reverse selected chunk so it's oldest to newest
+        serializer = CommentSerializer(instance=queryset, many=True, context={'request': self.context['request']})
+        return serializer.data

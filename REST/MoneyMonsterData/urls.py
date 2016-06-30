@@ -8,27 +8,12 @@ urlpatterns = format_suffix_patterns([
     url(r'^$', views.api_root),
 
     ###
-    # User urls
-    ###
-
-    url(r'^user/$',
-        views.UserList.as_view(),
-        name='user-list'),
-    url(r'^user/(?P<pk>[0-9]+)/$',
-        views.UserDetail.as_view(),
-        name='user-detail'),
-
-
-    ###
     # Profile urls
     ###
 
     url(r'^user/profile/$',
         views.ProfileList.as_view(),
         name='profile-list'),
-    url(r'^user/profile/(?P<pk>[0-9]+)/$',
-        views.ProfileDetail.as_view(),
-        name='profile-detail'),
 
     ###
     # ToDos urls
@@ -64,23 +49,20 @@ urlpatterns = format_suffix_patterns([
     # Quiz urls
     ###
 
-    url(r'^video/(?P<pk>[0-9]+)/quiz/list/$',
+    url(r'^quiz/$',
         views.QuizList.as_view(),
         name='quiz-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/$',
+    url(r'^quiz/(?P<pk>[0-9]+)/$',
         views.QuizDetail.as_view(),
         name='quiz-detail'),
 
     ###
-    # Questions urls
+    # Quiz results urls
     ###
 
-    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/list',
-        views.QuizQuestionsList.as_view(),
-        name='quizquestions-list'),
-    url(r'^video/(?P<pk>[0-9]+)/quiz/questions/detail',
-        views.QuizQuestionsDetail.as_view(),
-        name='quizquestions-detail'),
+    url(r'^quiz/(?P<pk>[0-9]+)/result/$',
+        views.QuizResultsDetail.as_view(),
+        name='quizresult-detail'),
 
     ###
     # Comment urls
@@ -100,12 +82,12 @@ urlpatterns = format_suffix_patterns([
     # Comment Like urls
     ###
 
-    # url(r'^comment/like/$',
-    #     views.CommentLikeList.as_view(),
-    #     name='commentlike-list'),
-    # url(r'^comment/like/(?P<pk>[0-9]+)/$',
-    #     views.CommentLikeDetail.as_view(),
-    #     name='commentlike-detail'),
+    url(r'^comment/like/$',
+        views.CommentLikeList.as_view(),
+        name='commentlike-list'),
+    url(r'^comment/like/(?P<pk>[0-9]+)/$',
+        views.CommentLikeDetail.as_view(),
+        name='commentlike-detail'),
 
 ])
 
