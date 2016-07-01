@@ -21,7 +21,7 @@ from .serializers import UserSerializer, VideoSummarySerializer, VideoDetailSeri
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'api_version': '0.1.1',
+        'api_version': '0.1.2',
         'quizzes': reverse('quiz-list', request=request, format=format),
         'comments': reverse('comment-list', request=request, format=format),
         'videos': reverse('video-list', request=request, format=format),
