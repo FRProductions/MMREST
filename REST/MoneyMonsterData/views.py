@@ -21,7 +21,7 @@ from .serializers import UserSerializer, VideoSummarySerializer, VideoDetailSeri
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'api_version': '0.1.1',
+        'api_version': '0.1.2',
         'quizzes': reverse('quiz-list', request=request, format=format),
         'comments': reverse('comment-list', request=request, format=format),
         'videos': reverse('video-list', request=request, format=format),
@@ -188,8 +188,8 @@ class TodoList(generics.ListCreateAPIView):
     serializer_class = ToDosSerializer
 
     def get_queryset(self):
-        # filter for the current user and non-completed items
-        return ToDo.objects.filter(user=self.request.user, completed=False)
+        # filter for the current user
+        return ToDo.objects.filter(user=self.request.user).order_by('completed', 'date_added')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)  # save only for the current user
