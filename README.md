@@ -60,11 +60,15 @@ Useful commands
 Update Database
 ---------------
 
+    # go to MMREST directory
+    /var/git/directors/MMREST
+
     # get latest
     sudo git fetch
     sudo git checkout <commit-hash>
 
     # apply any db migrations
+    cd REST
     sudo python manage.py migrate
 
     # restart uwsgi
