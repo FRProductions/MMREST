@@ -218,10 +218,17 @@ class VideoBaseSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class VideoSummarySerializer(VideoBaseSerializer):
+    # quiz = QuizSerializer(many=False)
+    #     # QuizSerializer(many=False)
+    quiz_exists = serializers.SerializerMethodField()
+
     class Meta:
         model = Video
         fields = ('url', 'id', 'title', 'thumbnail_filename', 'rating', 'user_video_completed', 'user_video_status',
-                  'user_quiz_passed')
+                  'user_quiz_passed', 'quiz_exists')
+
+    def get_quiz_exists(self, video):
+        return Video.quiz_exists(video)
 
 
 class VideoDetailSerializer(VideoBaseSerializer):

@@ -38,6 +38,12 @@ class Video(models.Model):
     def __str__(self):
         return 'Video(title:' + self.title + ')'
 
+    def quiz_exists(self):
+        if self.quiz:
+            return True
+        else:
+            return False
+
 
 # video status for a particular user
 class VideoStatus(models.Model):
